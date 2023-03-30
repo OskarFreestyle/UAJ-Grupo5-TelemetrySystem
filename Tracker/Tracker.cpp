@@ -1,10 +1,9 @@
-// Tracker.cpp : Define las funciones de la biblioteca estática.
-//
+#include "Tracker.h"
 
-#include "pch.h"
-#include "framework.h"
+Tracker::Tracker()
+{
+}
 
-// TODO: Ejemplo de una función de biblioteca
-void fnTracker()
+Tracker::~Tracker()
 {
 }
