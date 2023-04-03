@@ -167,10 +167,12 @@
   <ItemGroup>
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Tracker.h" />
+    <ClInclude Include="TrackerEvents.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Tracker.cpp" />
+    <ClCompile Include="TrackerEvents.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
