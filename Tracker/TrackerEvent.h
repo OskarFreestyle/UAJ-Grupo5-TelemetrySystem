@@ -1,19 +1,20 @@
 #pragma once
 #include <string>
 
-//Tipos de Eventos que recoge el tracker
+// Tipos de Eventos que recoge el tracker
+
 enum EventType { 
 	START_SESSION,
 	END_SESSION,
-	RETURN_BASE, //INFO AL LLEGAR A BASE
-	BASE_SLEEP_OPTION, //Opcion de sueño elegida
-	CRAFTED_SHIP_ITEMS, //Partes la nave crafteadas cada dia
-	BASE_ACTIONS_USED, //acciones usadas en el refugio
-	SELECTING_RAID, //Opcion de raid elegidas
+	RETURN_BASE,		// Información al llegar a la base
+	BASE_SLEEP_OPTION,  // Opcion de sueño elegida
+	CRAFTED_SHIP_ITEMS, // Partes la nave crafteadas cada dia
+	BASE_ACTIONS_USED,  // Acciones usadas en el refugio
+	SELECTING_RAID,     // Opcion de raid elegidas
 	USING_ITEM
 };	
 
-enum Places {
+enum Locations {
 	Hospital,
 	Nuclear_Station,
 	Coms,
@@ -21,45 +22,47 @@ enum Places {
 	Shop
 };
 
-enum Action
-{
+enum Action {
 	Enter,
 	Leave,
-	Click //Ubicacion seleccionada para raidear
+	Click	// Ubicacion seleccionada para raidear
 };
 
-class TrackerEvents
-{
+
+class TrackerEvent {
+
 protected:
-	float timeDone;
-	std::string id;
-	EventType eventName;
+	float timestamp_;
+	std::string id_;
+	EventType eventType_;
 
 public:
-	TrackerEvents(double timeDone_, std::string id_, EventType eventName_);
+	TrackerEvent(double timestamp, std::string id, EventType eventType);
 
 	virtual const std::string toJson();
 
 	const EventType getType();
 
-	virtual TrackerEvents* clone() = 0;
+	virtual TrackerEvent* clone() = 0;
 };
 
-//EVENTOS DE INICIO Y FIN DE SESION
-class SessionStartEvent : public TrackerEvents {
+
+// Eventos de inicio y fin de sesion
+class SessionStartEvent : public TrackerEvent {
 public:
 	SessionStartEvent(float timeDone_, std::string id_);
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-class SessionEndEvent : public TrackerEvents {
+class SessionEndEvent : public TrackerEvent {
 public:
 	SessionEndEvent(float timeDone_, std::string id_);
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//Clase intermedia Eventos diarios
-class DailyEvents : public TrackerEvents {
+
+// Clase intermedia Eventos diarios
+class DailyEvents : public TrackerEvent {
 protected:
 	int day;
 	DailyEvents(float timeDone_, std::string id_, EventType eventName_);
@@ -67,13 +70,14 @@ public:
 	virtual const std::string toJson();
 };
 
-//EVENTO SUEÑO AL LLEGAR AL REFUGIO
+
+// Evento sueño al llegar al refugio
 class ReturnBaseEvent : public DailyEvents {
 private:
-	int sleepValue; //sUEÑO AL LLEGAR AL REFUGIO
-	int hungerValue; //HAMBRE AL LLEGAR AL REFUGIO
-	int nFood;//cOMIDA QUE SE OUE SE PUEDE CRAFTEAR CON LO QUE TIENES AL LLEGAR AL REFUGIO
-	int nShipsPieces;//PIEZAS QUE SE PUEDEN CRAFTEAR CON LO QUE TIENE DE LA NAVE
+	int sleepValue;	    // Sueño al llegar al refugio
+	int hungerValue;	// Hambre al llegar al refugio
+	int nFood;			// Comida que se puede craftear con lo que tienes al llegar al refugio
+	int nShipsPieces;	// Piezas que se pueden craftear con lo que tiene la nave
 public:
 	ReturnBaseEvent(float timeDone_, std::string id_);
 
@@ -81,10 +85,10 @@ public:
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//EVENTO ELECCION DE SUEÑO
+// Evento elección de sueño
 class BaseSleepEvent : public DailyEvents {
 private:
 	int sleepOption;
@@ -101,10 +105,11 @@ public:
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//EVENTO CFRATEO NAVE
+
+// Evento crafteo nave
 class CraftShipEvent : public DailyEvents {
 private:
 	int nCrafted;
@@ -115,10 +120,11 @@ public:
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//EVENTO CFRATEO NAVE
+
+// Evento crafteo nave
 class BaseActionsEvent : public DailyEvents {
 private:
 	int nActions;
@@ -129,25 +135,27 @@ public:
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//EVENTO SelectingRaid
+
+// Evento seleccion de raid
 class SelectingRaidEvent : public DailyEvents {
 private:
-	Places location;
+	Locations location;
 	Action accion;
 public:
 	SelectingRaidEvent(float timeDone_, std::string id_);
 
-	void setParameters(Places location_, Action accion, int day_);
+	void setParameters(Locations location_, Action accion, int day_);
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };
 
-//EVENTO Using Item
+
+// Evento uso de item
 class UsingItemEvent : public DailyEvents {
 private:
 	int nItems;
@@ -158,5 +166,5 @@ public:
 
 	virtual const std::string toJson();
 
-	virtual TrackerEvents* clone();
+	virtual TrackerEvent* clone();
 };

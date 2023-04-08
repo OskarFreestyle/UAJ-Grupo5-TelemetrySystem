@@ -4,7 +4,9 @@ Timer* Timer::instance = nullptr;
 
 Timer* Timer::Instance()
 {
-	if (instance == nullptr) instance = new Timer();
+	if (instance == nullptr)
+		instance = new Timer();
+
 	return instance;
 }
 
@@ -17,14 +19,11 @@ void Timer::Release()
 	}
 }
 
-Timer::Timer()
-{
+Timer::Timer() {
 	startTime = time(NULL);
 }
 
-Timer::~Timer()
-{
-}
+Timer::~Timer() {}
 
 float Timer::getTimeSinceStart()
 {
