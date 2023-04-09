@@ -165,11 +165,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FilePersistence.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Tracker.h" />
     <ClInclude Include="TrackerEvent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FilePersistence.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Tracker.cpp" />
     <ClCompile Include="TrackerEvent.cpp" />
