@@ -1,9 +1,9 @@
 #pragma once
 #include <list>
-#include <time.h>
+#include <ctime>
 
-class Timer
-{
+class Timer {
+
 private:
 	static Timer* instance;
 	time_t startTime;
@@ -15,5 +15,6 @@ public:
 	static void Release();
 
 	float getTimeSinceStart();
+	time_t getTimeNow();
 };
 

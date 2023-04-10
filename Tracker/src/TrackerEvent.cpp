@@ -2,23 +2,53 @@
 #include <iostream>
 
 
-TrackerEvent::TrackerEvent(double timestamp, std::string id, EventType eventType) : timestamp_(timestamp), id_(id_), eventType_(eventType) {}
+TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventType) {
 
-const std::string TrackerEvent::toJson() {
-	// TODO
-	return "";
+	timestamp_ = timestamp;
+	id_ = id;
+	eventType_ = eventType;
+	maskBits_ = std::pow(2, (int) eventType_);
+
 }
 
 const EventType TrackerEvent::getType() {
 	return eventType_;
 }
 
+bool TrackerEvent::isTrackable(uint16_t eventsMaskBits) {
+	return (maskBits_ & eventsMaskBits) != 0;
+}
+
+void TrackerEvent::DestroyEvent(TrackerEvent* event) {
+	delete event; event = nullptr;
+}
+
+
+
+
+
+const std::string TestEvent::toJson() {
+	// TODO
+	return "";
+}
+
+TrackerEvent* TestEvent::clone() {
+	return nullptr;
+}
+
+TestEvent::TestEvent(float timestamp, std::string id, EventType eventType) : TrackerEvent(timestamp, id, eventType) {
+
+}
+
+
+
+
 
 
 // ------------------- DailyEvents -----------------------
 
-DailyEvents::DailyEvents(float timeDone_, std::string id_, EventType eventName_) : TrackerEvent(timeDone_, id_, eventName_) {
-
+DailyEvents::DailyEvents(float timestamp, std::string id, EventType eventType) : TrackerEvent(timestamp, id, eventType) {
+	day = 0;
 }
 
 const std::string DailyEvents::toJson() {
@@ -30,7 +60,7 @@ const std::string DailyEvents::toJson() {
 
 // ------------------- SessionStartEvent -----------------------
 
-SessionStartEvent::SessionStartEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, START_SESSION) {
+SessionStartEvent::SessionStartEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SESSION_STARTED) {
 	std::cout << "Empezo la sesion" << std::endl;
 }
 
@@ -38,11 +68,16 @@ TrackerEvent* SessionStartEvent::clone() {
 	return new SessionStartEvent(timestamp_, id_);
 }
 
+const std::string SessionStartEvent::toJson() {
+	// TODO
+	return "";
+}
+
 
 
 // ------------------- SessionEndEvent -----------------------
 
-SessionEndEvent::SessionEndEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, END_SESSION) {
+SessionEndEvent::SessionEndEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SESSION_ENDED) {
 	std::cout << "Empezo la sesion" << std::endl;
 }
 
@@ -50,11 +85,16 @@ TrackerEvent* SessionEndEvent::clone() {
 	return new SessionStartEvent(timestamp_, id_);
 }
 
+const std::string SessionEndEvent::toJson() {
+	// TODO
+	return "";
+}
+
 
 
 // ------------------- ReturnBaseEvent -----------------------
 
-ReturnBaseEvent::ReturnBaseEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, RETURN_BASE) {
+ReturnBaseEvent::ReturnBaseEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::RETURNED_TO_BASE) {
 	std::cout << "Ha vuelto a la base" << std::endl;
 }
 
@@ -81,7 +121,7 @@ TrackerEvent* ReturnBaseEvent::clone() {
 
 // ------------------- BaseSleepEvent -----------------------
 
-BaseSleepEvent::BaseSleepEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, BASE_SLEEP_OPTION) {
+BaseSleepEvent::BaseSleepEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ACTION_USED) {
 	std::cout << "Ha ido a dormir" << std::endl;
 }
 
@@ -113,7 +153,7 @@ TrackerEvent* BaseSleepEvent::clone() {
 
 // ------------------- CraftShipEvent -----------------------
 
-CraftShipEvent::CraftShipEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, CRAFTED_SHIP_ITEMS) {
+CraftShipEvent::CraftShipEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::SHIP_ITEM_CRAFTED) {
 	std::cout << "Crafteo de nave" << std::endl;
 }
 
@@ -140,7 +180,7 @@ TrackerEvent* CraftShipEvent::clone() {
 
 // ------------------- BaseActionsEvent -----------------------
 
-BaseActionsEvent::BaseActionsEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, BASE_ACTIONS_USED) {
+BaseActionsEvent::BaseActionsEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ACTION_USED) {
 	std::cout << "Crafteo de nave" << std::endl;
 }
 
@@ -167,7 +207,7 @@ TrackerEvent* BaseActionsEvent::clone() {
 
 // ------------------- SelectingRaidEvent -----------------------
 
-SelectingRaidEvent::SelectingRaidEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, SELECTING_RAID) {
+SelectingRaidEvent::SelectingRaidEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::RAID_SELECTED) {
 	std::cout << "Crafteo de nave" << std::endl;
 }
 
@@ -195,7 +235,7 @@ TrackerEvent* SelectingRaidEvent::clone() {
 
 // ------------------- UsingItemEvent -----------------------
 
-UsingItemEvent::UsingItemEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, USING_ITEM) {
+UsingItemEvent::UsingItemEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ITEM_CONSUMED) {
 	std::cout << "Crafteo de nave" << std::endl;
 }
 

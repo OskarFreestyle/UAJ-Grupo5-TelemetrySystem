@@ -3,15 +3,15 @@
 
 // Tipos de Eventos que recoge el tracker
 
-enum EventType { 
-	START_SESSION,
-	END_SESSION,
-	RETURN_BASE,		// Información al llegar a la base
-	BASE_SLEEP_OPTION,  // Opcion de sueño elegida
-	CRAFTED_SHIP_ITEMS, // Partes la nave crafteadas cada dia
-	BASE_ACTIONS_USED,  // Acciones usadas en el refugio
-	SELECTING_RAID,     // Opcion de raid elegidas
-	USING_ITEM
+enum class EventType { 
+	SESSION_STARTED,	// Comienzo de la sesion
+	SESSION_ENDED,		// Fin de la sesion
+	RETURNED_TO_BASE,	// Vuelta de una raid al refugio
+	FOOD_ITEM_CRAFTED,	// Crafteo de items de comida
+	SHIP_ITEM_CRAFTED,  // Crafteo de item de nave
+	ACTION_USED,		// Uso de una accion
+	RAID_SELECTED,      // Opcion de raid elegidas
+	ITEM_CONSUMED		// Consumo de un item
 };	
 
 enum Locations {
@@ -31,42 +31,66 @@ enum Action {
 
 class TrackerEvent {
 
-protected:
-	float timestamp_;
-	std::string id_;
-	EventType eventType_;
-
 public:
 	TrackerEvent(double timestamp, std::string id, EventType eventType);
 
-	virtual const std::string toJson();
+	virtual const std::string toJson() = 0;
+
+	virtual TrackerEvent* clone() = 0;
 
 	const EventType getType();
 
-	virtual TrackerEvent* clone() = 0;
+	bool isTrackable(uint16_t eventsMaskBits);
+
+	static void DestroyEvent(TrackerEvent* event);
+
+protected:
+
+	float timestamp_;
+	std::string id_;
+	EventType eventType_;
+	uint16_t maskBits_;
+
+};
+
+// Test
+class TestEvent : public TrackerEvent {
+
+public:
+	TestEvent(float timestamp, std::string id, EventType eventType);
+
+	virtual const std::string toJson();
+	virtual TrackerEvent* clone();
+};
+
+// Clase intermedia para eventos diarios
+class DailyEvents : public TrackerEvent {
+
+public:
+	virtual const std::string toJson();
+
+protected:
+	int day;
+	DailyEvents(float timestamp, std::string id, EventType eventType);
+
 };
 
 
 // Eventos de inicio y fin de sesion
 class SessionStartEvent : public TrackerEvent {
+
 public:
-	SessionStartEvent(float timeDone_, std::string id_);
+	SessionStartEvent(float timestamp, std::string id);
 	virtual TrackerEvent* clone();
+	virtual const std::string toJson();
+
 };
 
 class SessionEndEvent : public TrackerEvent {
+
 public:
-	SessionEndEvent(float timeDone_, std::string id_);
+	SessionEndEvent(float timestamp, std::string id);
 	virtual TrackerEvent* clone();
-};
-
-
-// Clase intermedia Eventos diarios
-class DailyEvents : public TrackerEvent {
-protected:
-	int day;
-	DailyEvents(float timeDone_, std::string id_, EventType eventName_);
-public:
 	virtual const std::string toJson();
 };
 
@@ -79,7 +103,7 @@ private:
 	int nFood;			// Comida que se puede craftear con lo que tienes al llegar al refugio
 	int nShipsPieces;	// Piezas que se pueden craftear con lo que tiene la nave
 public:
-	ReturnBaseEvent(float timeDone_, std::string id_);
+	ReturnBaseEvent(float timestamp, std::string id);
 
 	void setParameters(int sleepValue_,int hungerValue_, int nFood_, int nShipsPieces_, int day_);
 

@@ -1,8 +1,10 @@
 #pragma once
 
+#include "IPersistence.h"
+
 class TrackerEvent;
-class FilePersistence //: hereda de IPersistence --> Incluir
-{
+class FilePersistence : public IPersistence {
+
 public: 
 
 	FilePersistence();

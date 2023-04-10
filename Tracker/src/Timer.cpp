@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include <ctime>
 
 Timer* Timer::instance = nullptr;
 
@@ -20,12 +21,15 @@ void Timer::Release()
 }
 
 Timer::Timer() {
-	startTime = time(NULL);
+	startTime = std::time(NULL);
 }
 
 Timer::~Timer() {}
 
-float Timer::getTimeSinceStart()
-{
-	return difftime(time(NULL), startTime);
+float Timer::getTimeSinceStart() {
+	return std::difftime(getTimeNow(), startTime);
+}
+
+time_t Timer::getTimeNow() {
+	return std::time(NULL);
 }
