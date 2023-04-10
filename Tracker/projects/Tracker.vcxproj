@@ -19,13 +19,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -46,13 +46,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)libs\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)libs\$(ProjectName)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)</OutDir>
     <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -96,16 +96,20 @@
   <ItemGroup>
     <ClInclude Include="..\src\checkML.h" />
     <ClInclude Include="..\src\ConcurrentQueue.h" />
+    <ClInclude Include="..\src\CSVSerializer.h" />
     <ClInclude Include="..\src\FilePersistence.h" />
     <ClInclude Include="..\src\IPersistence.h" />
     <ClInclude Include="..\src\ISerializer.h" />
+    <ClInclude Include="..\src\JsonSerializer.h" />
     <ClInclude Include="..\src\sha256.h" />
     <ClInclude Include="..\src\Timer.h" />
     <ClInclude Include="..\src\Tracker.h" />
     <ClInclude Include="..\src\TrackerEvent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\CSVSerializer.cpp" />
     <ClCompile Include="..\src\FilePersistence.cpp" />
+    <ClCompile Include="..\src\JsonSerializer.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\sha256.cpp" />
     <ClCompile Include="..\src\Timer.cpp" />
@@ -113,7 +117,7 @@
     <ClCompile Include="..\src\TrackerEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\EventsTrackEnabled.json" />
+    <None Include="..\data\events.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,7 +11,7 @@ Timer* Timer::Instance()
 	return instance;
 }
 
-void Timer::Release()
+void Timer::End()
 {
 	if (instance != nullptr) 
 	{

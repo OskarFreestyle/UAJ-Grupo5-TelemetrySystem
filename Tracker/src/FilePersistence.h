@@ -2,17 +2,19 @@
 
 #include "IPersistence.h"
 
-class TrackerEvent;
 class FilePersistence : public IPersistence {
 
 public: 
 
-	FilePersistence();
+	FilePersistence(const std::list<ISerializer*>& serializers, const std::string& sessionId);
 
-	virtual ~FilePersistence();
+	~FilePersistence();
 
 	virtual void Flush();
 
-	virtual void Send(TrackerEvent* tEvent);
+private:
+	
+	std::string eventsLogPath;
+
 };
 

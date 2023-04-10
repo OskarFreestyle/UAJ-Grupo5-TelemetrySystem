@@ -9,13 +9,10 @@ class ISerializer {
 public:
 
 	/// <summary>
-	/// Returns the event serialized in an especific format
+	/// Método abstracto a redefinir por los objetos serializadores
 	/// </summary>
 	virtual std::string Serialize(TrackerEvent* event) = 0;
 
-	/// <summary>
-	/// Returns format name to be added to the file name
-	/// </summary>
 	virtual std::string Format() = 0;
 
 };

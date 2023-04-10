@@ -1,6 +1,11 @@
 #include "TrackerEvent.h"
-#include <iostream>
+#include "nlohmann/json.hpp"
+#include "checkML.h"
+#include <sstream>
 
+using json = nlohmann::json;
+
+// -------------------------- Clase padre -----------------------
 
 TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventType) {
 
@@ -9,6 +14,23 @@ TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventTy
 	eventType_ = eventType;
 	maskBits_ = std::pow(2, (int) eventType_);
 
+}
+
+const std::string TrackerEvent::toJson() {
+	json j;
+
+	j["SessionId"] = id_;
+	j["TimeSinceStart"] = timestamp_;
+	j["EventType"] = eventTypes[(int) eventType_];
+
+	return j.dump();
+}
+
+const std::string TrackerEvent::toCSV() {
+
+	std::string time = std::to_string(timestamp_);
+
+	return "id: " + id_ + ",time:" + time + ",eventType:" + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {
@@ -26,103 +48,146 @@ void TrackerEvent::DestroyEvent(TrackerEvent* event) {
 
 
 
-
-const std::string TestEvent::toJson() {
-	// TODO
-	return "";
-}
-
-TrackerEvent* TestEvent::clone() {
-	return nullptr;
-}
-
-TestEvent::TestEvent(float timestamp, std::string id, EventType eventType) : TrackerEvent(timestamp, id, eventType) {
-
-}
-
-
-
-
-
-
-// ------------------- DailyEvents -----------------------
-
-DailyEvents::DailyEvents(float timestamp, std::string id, EventType eventType) : TrackerEvent(timestamp, id, eventType) {
-	day = 0;
-}
-
-const std::string DailyEvents::toJson() {
-	// TODO
-	return "";
-}
-
-
-
 // ------------------- SessionStartEvent -----------------------
 
-SessionStartEvent::SessionStartEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SESSION_STARTED) {
-	std::cout << "Empezo la sesion" << std::endl;
-}
+SessionStartEvent::SessionStartEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SESSION_STARTED) {}
 
 TrackerEvent* SessionStartEvent::clone() {
 	return new SessionStartEvent(timestamp_, id_);
 }
 
-const std::string SessionStartEvent::toJson() {
-	// TODO
-	return "";
-}
 
 
 
 // ------------------- SessionEndEvent -----------------------
 
-SessionEndEvent::SessionEndEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SESSION_ENDED) {
-	std::cout << "Empezo la sesion" << std::endl;
-}
+SessionEndEvent::SessionEndEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
 
 TrackerEvent* SessionEndEvent::clone() {
-	return new SessionStartEvent(timestamp_, id_);
+	return new SessionEndEvent(timestamp_, id_);
 }
 
-const std::string SessionEndEvent::toJson() {
-	// TODO
-	return "";
-}
+
 
 
 
 // ------------------- ReturnBaseEvent -----------------------
 
-ReturnBaseEvent::ReturnBaseEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::RETURNED_TO_BASE) {
-	std::cout << "Ha vuelto a la base" << std::endl;
+ReturnToBaseEvent::ReturnToBaseEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::RETURNED_TO_BASE) {
+	fatigue = sleepOption = day = 0;
 }
 
-void ReturnBaseEvent::setParameters(int sleepValue_, int hungerValue_, int nFood_, int nShipsPieces_, int day_) {
-	sleepValue = sleepValue_;
-	hungerValue = hungerValue_;
-	nFood = nFood_;
-	nShipsPieces = nShipsPieces_;
-	day = day_;
+ReturnToBaseEvent* ReturnToBaseEvent::setFatigue(int fatigue) {
+	this->fatigue = fatigue;
+
+	return this;
 }
 
-const std::string ReturnBaseEvent::toJson() {
-	// TODO
-	return "";
+ReturnToBaseEvent* ReturnToBaseEvent::setSleepOption(int sleepOption) {
+	this->sleepOption = sleepOption;
+
+	return this;
 }
 
-TrackerEvent* ReturnBaseEvent::clone() {
-	ReturnBaseEvent* aux = new ReturnBaseEvent(timestamp_, id_);
-	aux->setParameters(sleepValue, hungerValue, nFood, nShipsPieces,day);
+ReturnToBaseEvent* ReturnToBaseEvent::setDay(int day) {
+	this->day = day;
 
-	return aux;
+	return this;
 }
+
+const std::string ReturnToBaseEvent::toJson() {
+
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Fatigue"] = fatigue;
+	j["SleepOption"] = sleepOption;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
+
+}
+
+const std::string ReturnToBaseEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV + ",Fatigue:" << fatigue << ",SleepOption:" << sleepOption << ",Day:" << day;
+
+	return ss.str();
+}
+
+TrackerEvent* ReturnToBaseEvent::clone() {
+	ReturnToBaseEvent* e = new ReturnToBaseEvent(timestamp_, id_);
+
+	e->setFatigue(fatigue)->setSleepOption(sleepOption)->setDay(day);
+
+	return e;
+}
+
+
+
+
+// -------------------- FoodItemCraftedEvent --------------------------------
+
+FoodItemCraftedEvent::FoodItemCraftedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
+	hunger = day = craft = 0;
+}
+
+FoodItemCraftedEvent* FoodItemCraftedEvent::setHunger(int hunger) {
+	this->hunger = hunger;
+
+	return this;
+}
+
+FoodItemCraftedEvent* FoodItemCraftedEvent::setCraft(bool craft) {
+	this->craft = craft;
+
+	return this;
+}
+
+FoodItemCraftedEvent* FoodItemCraftedEvent::setDay(int day) {
+	this->day = day;
+
+	return this;
+}
+
+const std::string FoodItemCraftedEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Hunger"] = hunger;
+	j["CanCraftFoodItems"] = craft;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
+}
+
+const std::string FoodItemCraftedEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV + ",Hunger:" << hunger << ",CanCraftFoodItems:" << craft << ",Day:" << day;
+
+	return ss.str();
+}
+
+TrackerEvent* FoodItemCraftedEvent::clone() {
+	FoodItemCraftedEvent* e = new FoodItemCraftedEvent(timestamp_, id_);
+
+	e->setHunger(hunger)->setCraft(craft)->setDay(day);
+
+	return e;
+}
+
+
+
 
 
 // ------------------- BaseSleepEvent -----------------------
 
-BaseSleepEvent::BaseSleepEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ACTION_USED) {
-	std::cout << "Ha ido a dormir" << std::endl;
+BaseSleepEvent::BaseSleepEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ACTION_USED) {
+
 }
 
 void BaseSleepEvent::setParameters(int sleepOption_, int nFood_, int nMedicine_, int nCraftingItems_, int nAmmo_, int nShipPieces_, int day_) {
@@ -134,10 +199,14 @@ void BaseSleepEvent::setParameters(int sleepOption_, int nFood_, int nMedicine_,
 	nShipPieces = nShipPieces_;
 	day = day_;
 
-	std::cout << "El dia " << day << " ha elegido la opcion de dormir " << sleepOption << std::endl;
 }
 
 const std::string BaseSleepEvent::toJson() {
+	// TODO
+	return "";
+}
+
+const std::string BaseSleepEvent::toCSV() {
 	// TODO
 	return "";
 }
@@ -153,18 +222,21 @@ TrackerEvent* BaseSleepEvent::clone() {
 
 // ------------------- CraftShipEvent -----------------------
 
-CraftShipEvent::CraftShipEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::SHIP_ITEM_CRAFTED) {
-	std::cout << "Crafteo de nave" << std::endl;
+CraftShipEvent::CraftShipEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SHIP_ITEM_CRAFTED) {
 }
 
 void CraftShipEvent::setParameters(int nCrafted_, int day_) {
 	nCrafted = nCrafted_;
 	day = day_;
 
-	std::cout << "El dia " << day << " he crafteado de nave estas piezas " << nCrafted << std::endl;
 }
 
 const std::string CraftShipEvent::toJson() {
+	// TODO
+	return "";
+}
+
+const std::string CraftShipEvent::toCSV() {
 	// TODO
 	return "";
 }
@@ -180,18 +252,21 @@ TrackerEvent* CraftShipEvent::clone() {
 
 // ------------------- BaseActionsEvent -----------------------
 
-BaseActionsEvent::BaseActionsEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ACTION_USED) {
-	std::cout << "Crafteo de nave" << std::endl;
+BaseActionsEvent::BaseActionsEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ACTION_USED) {
 }
 
 void BaseActionsEvent::setParameters(int nActions_, int day_) {
 	nActions = nActions_;
 	day = day_;
 
-	std::cout << "El dia " << day << " he usado estas acciones " << nActions << std::endl;
 }
 
 const std::string BaseActionsEvent::toJson() {
+	// TODO
+	return "";
+}
+
+const std::string BaseActionsEvent::toCSV() {
 	// TODO
 	return "";
 }
@@ -207,8 +282,7 @@ TrackerEvent* BaseActionsEvent::clone() {
 
 // ------------------- SelectingRaidEvent -----------------------
 
-SelectingRaidEvent::SelectingRaidEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::RAID_SELECTED) {
-	std::cout << "Crafteo de nave" << std::endl;
+SelectingRaidEvent::SelectingRaidEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::RAID_SELECTED) {
 }
 
 void SelectingRaidEvent::setParameters(Locations location_, Action accion_, int day_) {
@@ -216,10 +290,14 @@ void SelectingRaidEvent::setParameters(Locations location_, Action accion_, int 
 	accion = accion_;
 	day = day_;
 
-	std::cout << "El dia " << day << " esta sobre " << location_ << std::endl;
 }
 
 const std::string SelectingRaidEvent::toJson() {
+	// TODO
+	return "";
+}
+
+const std::string SelectingRaidEvent::toCSV() {
 	// TODO
 	return "";
 }
@@ -235,18 +313,21 @@ TrackerEvent* SelectingRaidEvent::clone() {
 
 // ------------------- UsingItemEvent -----------------------
 
-UsingItemEvent::UsingItemEvent(float timeDone_, std::string id_) : DailyEvents(timeDone_, id_, EventType::ITEM_CONSUMED) {
-	std::cout << "Crafteo de nave" << std::endl;
+UsingItemEvent::UsingItemEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ITEM_CONSUMED) {
 }
 
 void UsingItemEvent::setParameters(int nItems_, int day_) {
 	nItems = nItems_;
 	day = day_;
 
-	std::cout << "El dia " << day << " ha usado estos items " << nItems << std::endl;
 }
 
 const std::string UsingItemEvent::toJson() {
+	// TODO
+	return "";
+}
+
+const std::string UsingItemEvent::toCSV() {
 	// TODO
 	return "";
 }

@@ -12,7 +12,7 @@ private:
 	~Timer();
 public:
 	static Timer* Instance();
-	static void Release();
+	static void End();
 
 	float getTimeSinceStart();
 	time_t getTimeNow();

@@ -1,8 +1,10 @@
 #include "Tracker.h"
 #include "Timer.h"
 #include "sha256.h"
-#include "IPersistence.h"
 #include "nlohmann/json.hpp"
+#include "checkML.h"
+#include "FilePersistence.h"
+#include "JsonSerializer.h"
 
 #include <iostream>
 #include <fstream>
@@ -20,16 +22,31 @@ Tracker::Tracker() {
 
     createMaskBits();
 
+    serializers_.push_back(new JsonSerializer());
+    perstObjects_.push_back(new FilePersistence(serializers_, id_));
 }
 
 Tracker::~Tracker() {
+
+    Timer::End();
+
+    for (auto it = perstObjects_.begin(); it != perstObjects_.end(); ++it)
+        delete (*it);
+
+    perstObjects_.clear();
+
+    for (auto it = serializers_.begin(); it != serializers_.end(); ++it)
+        delete (*it);
+
+    serializers_.clear();
+
     std::cout << "Tracker destruido con exito!" << std::endl;
 }
 
 void Tracker::createMaskBits() {
 
     // Lectura de JSON y creacion de mascara de bits
-    std::ifstream file("EventsTrackEnabled.json");
+    std::ifstream file("events.json");
     json j;
     file >> j;
 
@@ -59,6 +76,12 @@ void Tracker::generateSessionId() {
     std::cout << "Identificador de la sesion: " << id_ << " generado con SHA-256 a partir de la fecha actual: " << dt << std::endl;
 }
 
+SessionStartEvent* Tracker::createSessionStartEvent() {
+
+    SessionStartEvent* e = new SessionStartEvent(Timer::Instance()->getTimeSinceStart(), id_);
+    return e;
+}
+
 void Tracker::End() {
 
     if (instance_ != nullptr) {
@@ -76,14 +99,19 @@ Tracker* Tracker::Instance() {
 
 }
 
+
 void Tracker::trackEvent(TrackerEvent* event) {
 
     if (!event->isTrackable(eventsMaskBits_)) return;
 
     for (std::list<IPersistence*>::iterator ite = perstObjects_.begin(); ite != perstObjects_.end(); ++ite) {
-        (*ite)->Send(event);
+        (*ite)->sendEvent(event);
     }
 
     TrackerEvent::DestroyEvent(event);
 
+}
+
+std::string Tracker::getSessionId() {
+    return id_;
 }

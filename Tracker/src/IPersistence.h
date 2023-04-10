@@ -3,62 +3,29 @@
 #include "ISerializer.h"
 #include <string>
 #include <list>
-#include "ConcurrentQueue.h"
-#include <thread>
+#include <queue>
 
-// interfaz de persistencia, con metodos para recibir eventos y persistirlos
-// utiliza una hebra para persistir los eventos concurrentemente
-class IPersistence
-{
+class IPersistence {
+
 public:
+
 	IPersistence() {};
 	virtual ~IPersistence() {};
 
-	// se recibe un evento, se añade a la cola, y si esta supera el tamaño maximo se persisten todos los eventos
-	inline void Send(TrackerEvent* trackerEvent)
-	{
-		TrackerEvent* clone = trackerEvent->clone(); //pushes the pointer's clone
-		_eventQueue.push(clone);
+	inline void sendEvent(TrackerEvent* trackerEvent) {
+		TrackerEvent* clone = trackerEvent->clone();
+		events.push(clone);
 
-		if (_eventQueue.size() >= MAX_EVENTS)
-		{
-			Flush();
-		}
-		//std::cout << "PUSH" << std::endl;
-		//std::cout << "event sent" << std::endl;
-	};
+		if (events.size() >= MAX_EVENTS_IN_QUEUE) Flush();
+	}
 
-	// si la hebra de persistencia ha acabado de hacer flush, se hace otro flush
-	// si no, no hace nada
 	virtual void Flush() = 0;
 
-	inline void release()
-	{
-		if (thread_.joinable()) {
-			thread_.join();
-		}
-	};
-
-	// flush final de los eventos -> persiste todos los eventos que queden en la cola
-	inline virtual void finalFlush() {
-		while (!_eventQueue.empty()) {
-			Flush();
-		}
-	};
-
 protected:
-	// thread
-	std::thread thread_;
 
-	std::list<ISerializer*> _serializeObjects; //list of active formats
+	std::list<ISerializer*> serializers;
 
-	Queue<TrackerEvent*> _eventQueue; //stored events pending flush operation
+	std::queue<TrackerEvent*> events;
 
-	const int MAX_EVENTS = 20; //max queue storage
-
-	// recorrera la lista de serializadores para persistir cada evento en cada uno de los formatos
-	virtual void protectedFlush() = 0;
-
-	bool threadFinished_ = true;
-	std::mutex mutex_;
+	const int MAX_EVENTS_IN_QUEUE = 1;
 };
