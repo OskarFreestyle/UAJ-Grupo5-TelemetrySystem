@@ -6,13 +6,20 @@
 #include <fstream>
 #include <direct.h>
 #include <cassert>
+#include <io.h>
 
 FilePersistence::FilePersistence(const std::list<ISerializer*>& serializers, const std::string& sessionId) {
 
 	eventsLogPath = "\events_log\\";
-	int err = _mkdir(eventsLogPath.c_str());
 
-	assert(err == 0, "La creación del directorio con nombre " + eventsLogPath.c_str() + " ha fallado!");
+	int result = _access(eventsLogPath.c_str(), 0);
+
+	if (result != 0) {
+		int err = _mkdir(eventsLogPath.c_str());
+
+		if (err != 0)
+			std::cout << "La creacion del directorio ha fallado!";
+	}
 
 	eventsLogPath.append("\\" + sessionId + ".");
 
