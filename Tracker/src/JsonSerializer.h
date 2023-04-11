@@ -10,7 +10,7 @@ class JsonSerializer : public ISerializer {
 
 public:
 
-	JsonSerializer() {};
+	JsonSerializer();
 	~JsonSerializer() {};
 
 	/// <summary>

@@ -22,23 +22,22 @@ enum class EventType {
 
 // Enum -> String (Comodidad)
 const std::string eventTypes[] = {
-	"SESSION_STARTED",
-	"SESSION_ENDED",
-	"RETURNED_TO_BASE",
-	"FOOD_ITEM_CRAFTED",
-	"SHIP_ITEM_CRAFTED",
-	"ACTION_USED",
-	"RAID_SELECTED",
-	"ITEM_CONSUMED",
-	"POSITION"
+	"SESSION_STARTED", //0
+	"SESSION_ENDED",//1
+	"RETURNED_TO_BASE",//2
+	"FOOD_ITEM_CRAFTED",//3
+	"SHIP_ITEM_CRAFTED",//4
+	"ACTION_USED",//5
+	"ENTER_RAID_MENU",//6
+	"RAID_SELECTED",//7
+	"ITEM_CONSUMED",//8
+	"POSITION"//9,
 };
-
 
 
 class TrackerEvent {
 
 public:
-
 	TrackerEvent(double timestamp, std::string id, EventType eventType);
 
 	virtual TrackerEvent* clone() = 0;

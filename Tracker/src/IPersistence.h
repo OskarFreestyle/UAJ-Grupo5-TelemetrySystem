@@ -9,7 +9,7 @@ class IPersistence {
 
 public:
 
-	IPersistence() {};
+	IPersistence(int maxEventsInQueue): MAX_EVENTS_IN_QUEUE(maxEventsInQueue) {};
 	virtual ~IPersistence() {};
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
@@ -23,9 +23,7 @@ public:
 
 protected:
 
-	std::list<ISerializer*> serializers;
-
 	std::queue<TrackerEvent*> events;
 
-	const int MAX_EVENTS_IN_QUEUE = 1;
+	int MAX_EVENTS_IN_QUEUE = 1;
 };

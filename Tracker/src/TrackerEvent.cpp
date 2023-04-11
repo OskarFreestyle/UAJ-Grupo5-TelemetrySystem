@@ -448,7 +448,6 @@ PositionEvent::PositionEvent(float timestamp, std::string id): TrackerEvent(time
 {
 	x = y = 0;
 }
-
 PositionEvent* PositionEvent::setPosition(float x, float y)
 {
 	this->x = x;
@@ -462,17 +461,15 @@ PositionEvent* PositionEvent::setEntity(std::string name)
 	entity = name;
 	return this;
 }
-
 const std::string PositionEvent::toJson()
 {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["x"] = x;
 	j["y"] = x;
 	j["entity"] = entity;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string PositionEvent::toCSV()

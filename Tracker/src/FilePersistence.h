@@ -6,7 +6,7 @@ class FilePersistence : public IPersistence {
 
 public: 
 
-	FilePersistence(const std::list<ISerializer*>& serializers, const std::string& sessionId);
+	FilePersistence(int MaxElementsInQueue, const std::string& sessionId);
 
 	~FilePersistence();
 

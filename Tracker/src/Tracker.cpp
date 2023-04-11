@@ -5,6 +5,7 @@
 #include "checkML.h"
 #include "FilePersistence.h"
 #include "JsonSerializer.h"
+#include "CSVSerializer.h"
 
 #include <iostream>
 #include <fstream>
@@ -18,19 +19,17 @@ Tracker::Tracker() {
 
     std::cout << "Tracker construido con exito!" << std::endl;
 
-    dumpTime = -1;
     dumpTimer = 0;
-    defaultRecurringInterval = 20;
 
     generateSessionId();
 
     ReadConfigurationFile();
 
     // Se crean los serializadores y los objetos de persistencia
-    serializers_.push_back(new JsonSerializer());
-    perstObjects_.push_back(new FilePersistence(serializers_, id_));
+    serializers_["json"] = new JsonSerializer();
+    serializers_["csv"] = new CSVSerializer();
 
-
+    perstObjects_.push_back(new FilePersistence(maxElementsInQueue, id_));
 }
 
 Tracker::~Tracker() {
@@ -40,8 +39,9 @@ Tracker::~Tracker() {
 
     perstObjects_.clear();
 
-    for (auto it = serializers_.begin(); it != serializers_.end(); ++it)
-        delete (*it);
+    for (auto& ser : serializers_) {
+        delete ser.second;
+    }
 
     serializers_.clear();
 
@@ -67,7 +67,9 @@ void Tracker::ReadConfigurationFile() {
     }
 
     dumpTime = j.contains("dumpTime") ? j["dumpTime"].get<float>() : -1;
-    defaultRecurringInterval = j.contains("defaultRecurringInterval") ? j["defaultRecurringInterval"].get<float>() : 3;
+    defaultRecurringInterval = j.contains("defaultRecurringInterval") ? j["defaultRecurringInterval"].get<float>() : 10;
+    maxElementsInQueue = j.contains("maxElementsInQueue") ? j["maxElementsInQueue"].get<int>() : 10;
+    currentSerializer = j.contains("serializer") ? j["serializer"].get<std::string>() : "json";
 }
 
 void Tracker::generateSessionId() {
@@ -155,12 +157,26 @@ void Tracker::trackEvent(TrackerEvent* event) {
     if (!event->isTrackable(eventsMaskBits_)) return;
 
     // Envia a todos los objetos de persistencia
+
     for (auto p : perstObjects_)
         p->sendEvent(event);
 
     // Destruye el evento ya que los objetos de persistencia lo clonan
     TrackerEvent::DestroyEvent(event);
 
+}
+
+ISerializer* Tracker::GetSerializer()
+{
+    std::string current = instance_->currentSerializer;
+    std::unordered_map<std::string, ISerializer*>& serializer = instance_->serializers_;
+
+
+    if (serializer.contains(current)) {
+        return serializer[current];
+    }
+
+    return serializer["json"];
 }
 
 void Tracker::Update(float dt)

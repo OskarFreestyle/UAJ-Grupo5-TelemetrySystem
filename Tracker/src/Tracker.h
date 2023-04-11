@@ -2,6 +2,7 @@
 
 #include <string>
 #include <list>
+#include <unordered_map>
 #include "TrackerEvent.h"
 
 class IPersistence;
@@ -29,7 +30,7 @@ private:
     // Genera un id de sesion aplicando sha256 a una cadena sacada a partir del tiempo actual
     void generateSessionId();
 
-    std::list<ISerializer*> serializers_;
+    std::unordered_map<std::string, ISerializer*> serializers_;
 
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
@@ -37,6 +38,8 @@ private:
     std::list<RecurringEvent*> recurringEvents;
 
 
+    std::string currentSerializer;
+    int maxElementsInQueue;
 
     float dumpTimer;
     float dumpTime;
@@ -50,6 +53,8 @@ public:
     // Evitamos asignar objetos de la clase Tracker
     void operator=(const Tracker&) = delete;
 
+
+    static ISerializer* GetSerializer();
 
 
     /// <summary>

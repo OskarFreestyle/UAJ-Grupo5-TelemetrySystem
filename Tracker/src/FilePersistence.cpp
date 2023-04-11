@@ -8,7 +8,7 @@
 #include <cassert>
 #include <io.h>
 
-FilePersistence::FilePersistence(const std::list<ISerializer*>& serializers, const std::string& sessionId) {
+FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sessionId) : IPersistence(maxElementsInQueue) {
 
 	eventsLogPath = "\events_log\\";
 
@@ -22,34 +22,38 @@ FilePersistence::FilePersistence(const std::list<ISerializer*>& serializers, con
 	}
 
 	eventsLogPath.append("\\" + sessionId + ".");
-
-	this->serializers = std::list<ISerializer*>(serializers);
 }
 
 FilePersistence::~FilePersistence() {}
 
+#include <iostream>
+
 void FilePersistence::Flush() {
+
+	std::ofstream file;
+
+	auto s = Tracker::GetSerializer();
+	std::string path;
+	path.append(eventsLogPath + s->Format());
+	file.open(path, std::ios::out | std::ios::app);
+
+	file << s->prefix;
 
 	while (!events.empty()) {
 
 		TrackerEvent* event = events.front();
 		events.pop();
 
-		std::ofstream file;
+		std::string stringEvent = s->Serialize(event);
 
-		for (auto s : serializers) {
-			std::string path;
-			path.append(eventsLogPath + s->Format());
-			file.open(path, std::ios::out | std::ios::app);
-
-			std::string stringEvent = s->Serialize(event);
-			file << stringEvent << '\n';
-
-			file.close();
-		}
+		file << stringEvent << '\n';
 
 		TrackerEvent::DestroyEvent(event);
 	}
+
+	file << s->sufix;
+
+	file.close();
 
 }
 
