@@ -148,14 +148,12 @@ Tracker* Tracker::Instance() {
 
 }
 
-#include <iostream>
 
 void Tracker::trackEvent(TrackerEvent* event) {
 
     // Si el evento no es trackeable se descarta
     if (!event->isTrackable(eventsMaskBits_)) return;
 
-    std::cout << "Evento enviado a la persistencia" << std::endl;
     // Envia a todos los objetos de persistencia
     for (auto p : perstObjects_)
         p->sendEvent(event);
@@ -179,8 +177,6 @@ void Tracker::Update(float dt)
 
                 persistance->Flush();
             }
-
-            std::cout << "Flush" << std::endl;
 
             instance_->dumpTimer = 0;
         }

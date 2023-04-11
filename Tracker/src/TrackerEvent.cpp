@@ -432,15 +432,11 @@ RecurringEvent::RecurringEvent(float interval, std::function<TrackerEvent* ()> f
 	this->interval = interval;
 }
 
-#include <iostream>
-
 void RecurringEvent::Update(float dt)
 {
 	timer += dt;
 
 	if (timer > interval) {
-
-		std::cout << "Event created" << std::endl;
 
 		Tracker::Instance()->trackEvent(creator());
 
@@ -457,8 +453,6 @@ PositionEvent* PositionEvent::setPosition(float x, float y)
 {
 	this->x = x;
 	this->y = y;
-
-	std::cout << x << ", " << y << std::endl;
 
 	return this;
 }
@@ -478,7 +472,7 @@ const std::string PositionEvent::toJson()
 	j["y"] = x;
 	j["entity"] = entity;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string PositionEvent::toCSV()
