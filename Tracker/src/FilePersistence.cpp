@@ -4,15 +4,15 @@
 
 #include <iostream>
 #include <fstream>
-#include <Windows.h>
-#include <stdlib.h>
 #include <direct.h>
-#include <cstdlib>
+#include <cassert>
 
 FilePersistence::FilePersistence(const std::list<ISerializer*>& serializers, const std::string& sessionId) {
 
 	eventsLogPath = "\events_log\\";
 	int err = _mkdir(eventsLogPath.c_str());
+
+	assert(err == 0, "La creación del directorio con nombre " + eventsLogPath.c_str() + " ha fallado!");
 
 	eventsLogPath.append("\\" + sessionId + ".");
 
@@ -30,13 +30,12 @@ void FilePersistence::Flush() {
 
 		std::ofstream file;
 
-		for (std::list<ISerializer*>::iterator it = serializers.begin(); it != serializers.end(); ++it) {
-
+		for (auto s : serializers) {
 			std::string path;
-			path.append(eventsLogPath + (*it)->Format());
+			path.append(eventsLogPath + s->Format());
 			file.open(path, std::ios::out | std::ios::app);
 
-			std::string stringEvent = (*it)->Serialize(event);
+			std::string stringEvent = s->Serialize(event);
 			file << stringEvent << '\n';
 
 			file.close();

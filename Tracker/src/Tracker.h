@@ -43,7 +43,17 @@ public:
     // Evitamos asignar objetos de la clase Tracker
     void operator=(const Tracker&) = delete;
 
+
+    // Factoria de eventos
     SessionStartEvent* createSessionStartEvent();
+    SessionEndEvent* createSessionEndEvent();
+    ReturnToBaseEvent* createReturnedToBaseEvent();
+    FoodItemCraftedEvent* createFoodItemCraftedEvent();
+    ShipItemCraftedEvent* createShipItemCraftedEvent();
+    ActionUsedEvent* createActionUsedEvent();
+    EnterRaidMenuEvent* createEnterRaidMenuEvent();
+    RaidSelectedEvent* createRaidSelectedEvent();
+    ItemConsumedEvent* createItemConsumedEvent();
 
     /// <summary>
     /// Libera los recursos del tracker, persistiendo antes todos los eventos de la cola
@@ -60,11 +70,6 @@ public:
     /// Después es eliminado ya que los objetos de persistencia lo clona
     /// </summary>
     void trackEvent(TrackerEvent* event);
-
-    /// <summary>
-    /// Devuelve el id de la sesion
-    /// </summary>
-    std::string getSessionId();
 
 };
 

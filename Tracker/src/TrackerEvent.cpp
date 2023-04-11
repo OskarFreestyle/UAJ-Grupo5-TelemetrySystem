@@ -5,6 +5,7 @@
 
 using json = nlohmann::json;
 
+
 // -------------------------- Clase padre -----------------------
 
 TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventType) {
@@ -63,7 +64,7 @@ TrackerEvent* SessionStartEvent::clone() {
 
 SessionEndEvent::SessionEndEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
 
-TrackerEvent* SessionEndEvent::clone() {
+SessionEndEvent* SessionEndEvent::clone() {
 	return new SessionEndEvent(timestamp_, id_);
 }
 
@@ -101,7 +102,7 @@ const std::string ReturnToBaseEvent::toJson() {
 
 	json j;
 	j["Fatigue"] = fatigue;
-	j["SleepOption"] = sleepOption;
+	j["Sleep Option"] = sleepOption;
 	j["Day"] = day;
 
 	return parentJson + j.dump();
@@ -112,12 +113,12 @@ const std::string ReturnToBaseEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV + ",Fatigue:" << fatigue << ",SleepOption:" << sleepOption << ",Day:" << day;
+	ss << parentCSV << ",Fatigue:" << fatigue << ",Sleep Option:" << sleepOption << ",Day:" << day;
 
 	return ss.str();
 }
 
-TrackerEvent* ReturnToBaseEvent::clone() {
+ReturnToBaseEvent* ReturnToBaseEvent::clone() {
 	ReturnToBaseEvent* e = new ReturnToBaseEvent(timestamp_, id_);
 
 	e->setFatigue(fatigue)->setSleepOption(sleepOption)->setDay(day);
@@ -157,7 +158,7 @@ const std::string FoodItemCraftedEvent::toJson() {
 
 	json j;
 	j["Hunger"] = hunger;
-	j["CanCraftFoodItems"] = craft;
+	j["Can Craft Food Items"] = craft;
 	j["Day"] = day;
 
 	return parentJson + j.dump();
@@ -167,12 +168,12 @@ const std::string FoodItemCraftedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV + ",Hunger:" << hunger << ",CanCraftFoodItems:" << craft << ",Day:" << day;
+	ss << parentCSV << ",Hunger:" << hunger << ",Can Craft Food Items:" << craft << ",Day:" << day;
 
 	return ss.str();
 }
 
-TrackerEvent* FoodItemCraftedEvent::clone() {
+FoodItemCraftedEvent* FoodItemCraftedEvent::clone() {
 	FoodItemCraftedEvent* e = new FoodItemCraftedEvent(timestamp_, id_);
 
 	e->setHunger(hunger)->setCraft(craft)->setDay(day);
@@ -183,158 +184,242 @@ TrackerEvent* FoodItemCraftedEvent::clone() {
 
 
 
+// -------------------------- CraftShipEvent ------------------------------
 
-// ------------------- BaseSleepEvent -----------------------
-
-BaseSleepEvent::BaseSleepEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ACTION_USED) {
-
+ShipItemCraftedEvent::ShipItemCraftedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
+	nCrafted = nCraftables = day = 0;
 }
 
-void BaseSleepEvent::setParameters(int sleepOption_, int nFood_, int nMedicine_, int nCraftingItems_, int nAmmo_, int nShipPieces_, int day_) {
-	sleepOption = sleepOption_;
-	nFood = nFood_;
-	nMedicine = nMedicine_;
-	nCraftingItems = nCraftingItems_;
-	nAmmo = nAmmo_;
-	nShipPieces = nShipPieces_;
-	day = day_;
+ShipItemCraftedEvent* ShipItemCraftedEvent::setCrafted(int crafted) {
+	this->nCrafted = crafted;
 
+	return this;
 }
 
-const std::string BaseSleepEvent::toJson() {
-	// TODO
-	return "";
+ShipItemCraftedEvent* ShipItemCraftedEvent::setCraftables(int craftables) {
+	this->nCraftables = craftables;
+
+	return this;
 }
 
-const std::string BaseSleepEvent::toCSV() {
-	// TODO
-	return "";
-}
+ShipItemCraftedEvent* ShipItemCraftedEvent::setDay(int day) {
+	this->day = day;
 
-TrackerEvent* BaseSleepEvent::clone() {
-	BaseSleepEvent* aux = new BaseSleepEvent(timestamp_, id_);
-	aux->setParameters(sleepOption, nFood, nMedicine, nCraftingItems, nAmmo, nShipPieces, day);
-
-	return aux;
+	return this;
 }
 
 
+const std::string ShipItemCraftedEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
 
-// ------------------- CraftShipEvent -----------------------
+	json j;
+	j["Ship Items Crafted"] = nCrafted;
+	j["Craftable Ship Items"] = nCraftables;
+	j["Day"] = day;
 
-CraftShipEvent::CraftShipEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::SHIP_ITEM_CRAFTED) {
+	return parentJson + j.dump();
 }
 
-void CraftShipEvent::setParameters(int nCrafted_, int day_) {
-	nCrafted = nCrafted_;
-	day = day_;
+const std::string ShipItemCraftedEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
 
+	std::stringstream ss;
+	ss << parentCSV << ",Ship Items Crafted:" << nCrafted << ",Craftable Ship Items:" << nCraftables << ",Day:" << day;
+
+	return ss.str();
 }
 
-const std::string CraftShipEvent::toJson() {
-	// TODO
-	return "";
-}
+ShipItemCraftedEvent* ShipItemCraftedEvent::clone() {
+	ShipItemCraftedEvent* e = new ShipItemCraftedEvent(timestamp_, id_);
 
-const std::string CraftShipEvent::toCSV() {
-	// TODO
-	return "";
-}
+	e->setCrafted(nCrafted)->setCraftables(nCraftables)->setDay(day);
 
-TrackerEvent* CraftShipEvent::clone() {
-	CraftShipEvent* aux = new CraftShipEvent(timestamp_, id_);
-	aux->setParameters(nCrafted, day);
-
-	return aux;
+	return e;
 
 }
 
 
-// ------------------- BaseActionsEvent -----------------------
+// ---------------------------- ActionUsedEvent ---------------------------------
 
-BaseActionsEvent::BaseActionsEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ACTION_USED) {
+ActionUsedEvent::ActionUsedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
+	nActions = day = 0;
 }
 
-void BaseActionsEvent::setParameters(int nActions_, int day_) {
-	nActions = nActions_;
-	day = day_;
+ActionUsedEvent* ActionUsedEvent::setActions(int actions) {
+	this->nActions = actions;
 
+	return this;
 }
 
-const std::string BaseActionsEvent::toJson() {
-	// TODO
-	return "";
+ActionUsedEvent* ActionUsedEvent::setDay(int day) {
+	this->day = day;
+
+	return this;
 }
 
-const std::string BaseActionsEvent::toCSV() {
-	// TODO
-	return "";
+const std::string ActionUsedEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Actions Used"] = nActions;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
 }
 
-TrackerEvent* BaseActionsEvent::clone() {
-	BaseActionsEvent* aux = new BaseActionsEvent(timestamp_, id_);
-	aux->setParameters(nActions, day);
+const std::string ActionUsedEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
 
-	return aux;
+	std::stringstream ss;
+	ss << parentCSV << ",Actions Used:" << nActions << ",Day:" << day;
+
+	return ss.str();
+}
+
+ActionUsedEvent* ActionUsedEvent::clone() {
+	ActionUsedEvent* e = new ActionUsedEvent(timestamp_, id_);
+
+	e->setActions(nActions)->setDay(day);
+
+	return e;
 }
 
 
 
-// ------------------- SelectingRaidEvent -----------------------
+// ------------------------ EnterRaidMenuEvent ------------------------------
 
-SelectingRaidEvent::SelectingRaidEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::RAID_SELECTED) {
+EnterRaidMenuEvent::EnterRaidMenuEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
+	day = 0;
 }
 
-void SelectingRaidEvent::setParameters(Locations location_, Action accion_, int day_) {
-	location = location_;
-	accion = accion_;
-	day = day_;
+EnterRaidMenuEvent* EnterRaidMenuEvent::setDay(int day) {
+	this->day = day;
 
+	return this;
 }
 
-const std::string SelectingRaidEvent::toJson() {
-	// TODO
-	return "";
+const std::string EnterRaidMenuEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
 }
 
-const std::string SelectingRaidEvent::toCSV() {
-	// TODO
-	return "";
+const std::string EnterRaidMenuEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV << ",Day:" << day;
+
+	return ss.str();
 }
 
-TrackerEvent* SelectingRaidEvent::clone() {
-	SelectingRaidEvent* aux = new SelectingRaidEvent(timestamp_, id_);
-	aux->setParameters(location, accion, day);
+EnterRaidMenuEvent* EnterRaidMenuEvent::clone() {
+	EnterRaidMenuEvent* e = new EnterRaidMenuEvent(timestamp_, id_);
 
-	return aux;
+	e->setDay(day);
+
+	return e;
+}
+
+
+
+
+// ------------------- RaidSelectedEvent -----------------------
+
+RaidSelectedEvent::RaidSelectedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
+	day = hunger = location = 0;
+}
+
+RaidSelectedEvent* RaidSelectedEvent::setItems(const std::list<int>& l) {
+	items = l;
+
+	return this;
+}
+
+RaidSelectedEvent* RaidSelectedEvent::setLocation(int location) {
+	this->location = location;
+
+	return this;
+}
+
+RaidSelectedEvent* RaidSelectedEvent::setHunger(int hunger) {
+	this->hunger = hunger;
+
+	return this;
+}
+
+RaidSelectedEvent* RaidSelectedEvent::setDay(int day) {
+	this->day = day;
+
+	return this;
+}
+
+const std::string RaidSelectedEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
+}
+
+const std::string RaidSelectedEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV << ",Day:" << day;
+
+	return ss.str();
+}
+
+RaidSelectedEvent* RaidSelectedEvent::clone() {
+	RaidSelectedEvent* e = new RaidSelectedEvent(timestamp_, id_);
+
+	e->setDay(day);
+
+	return e;
 }
 
 
 
 // ------------------- UsingItemEvent -----------------------
 
-UsingItemEvent::UsingItemEvent(float timeDone_, std::string id_) : TrackerEvent(timeDone_, id_, EventType::ITEM_CONSUMED) {
+ItemConsumedEvent::ItemConsumedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ITEM_CONSUMED) {
+	day = 0;
 }
 
-void UsingItemEvent::setParameters(int nItems_, int day_) {
-	nItems = nItems_;
-	day = day_;
+ItemConsumedEvent* ItemConsumedEvent::setDay(int day) {
+	this->day = day;
 
+	return this;
 }
 
-const std::string UsingItemEvent::toJson() {
-	// TODO
-	return "";
+
+const std::string ItemConsumedEvent::toJson() {
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["Day"] = day;
+
+	return parentJson + j.dump();
 }
 
-const std::string UsingItemEvent::toCSV() {
-	// TODO
-	return "";
+const std::string ItemConsumedEvent::toCSV() {
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV << ",Day:" << day;
+
+	return ss.str();
 }
 
-TrackerEvent* UsingItemEvent::clone() {
-	UsingItemEvent* aux = new UsingItemEvent(timestamp_, id_);
-	aux->setParameters(nItems, day);
+ItemConsumedEvent* ItemConsumedEvent::clone() {
+	ItemConsumedEvent* e = new ItemConsumedEvent(timestamp_, id_);
 
-	return aux;
+	e->setDay(day);
+
+	return e;
 }

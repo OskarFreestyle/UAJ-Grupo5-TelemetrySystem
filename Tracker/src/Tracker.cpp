@@ -22,13 +22,12 @@ Tracker::Tracker() {
 
     createMaskBits();
 
+    // Se crean los serializadores y los objetos de persistencia
     serializers_.push_back(new JsonSerializer());
     perstObjects_.push_back(new FilePersistence(serializers_, id_));
 }
 
 Tracker::~Tracker() {
-
-    Timer::End();
 
     for (auto it = perstObjects_.begin(); it != perstObjects_.end(); ++it)
         delete (*it);
@@ -56,6 +55,7 @@ void Tracker::createMaskBits() {
         bool active = item.at("active");
         int index = item.at("index");
 
+        // Si el evento esta marcado como trackeable se añade a la mascara
         if (active)
             eventsMaskBits_ += std::pow(2, index);
     }
@@ -77,12 +77,44 @@ void Tracker::generateSessionId() {
 }
 
 SessionStartEvent* Tracker::createSessionStartEvent() {
+    return new SessionStartEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
 
-    SessionStartEvent* e = new SessionStartEvent(Timer::Instance()->getTimeSinceStart(), id_);
-    return e;
+SessionEndEvent* Tracker::createSessionEndEvent() {
+    return new SessionEndEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+ReturnToBaseEvent* Tracker::createReturnedToBaseEvent() {
+    return new ReturnToBaseEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+FoodItemCraftedEvent* Tracker::createFoodItemCraftedEvent() {
+    return new FoodItemCraftedEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+ShipItemCraftedEvent* Tracker::createShipItemCraftedEvent() {
+    return new ShipItemCraftedEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+ActionUsedEvent* Tracker::createActionUsedEvent() {
+    return new ActionUsedEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+EnterRaidMenuEvent* Tracker::createEnterRaidMenuEvent() {
+    return new EnterRaidMenuEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+RaidSelectedEvent* Tracker::createRaidSelectedEvent() {
+    return new RaidSelectedEvent(Timer::Instance()->getTimeSinceStart(), id_);
+}
+
+ItemConsumedEvent* Tracker::createItemConsumedEvent() {
+    return new ItemConsumedEvent(Timer::Instance()->getTimeSinceStart(), id_);
 }
 
 void Tracker::End() {
+
+    Timer::End();
 
     if (instance_ != nullptr) {
         delete instance_;
@@ -102,16 +134,14 @@ Tracker* Tracker::Instance() {
 
 void Tracker::trackEvent(TrackerEvent* event) {
 
+    // Si el evento no es trackeable se descarta
     if (!event->isTrackable(eventsMaskBits_)) return;
 
-    for (std::list<IPersistence*>::iterator ite = perstObjects_.begin(); ite != perstObjects_.end(); ++ite) {
-        (*ite)->sendEvent(event);
-    }
+    // Envia a todos los objetos de persistencia
+    for (auto p : perstObjects_)
+        p->sendEvent(event);
 
+    // Destruye el evento ya que los objetos de persistencia lo clonan
     TrackerEvent::DestroyEvent(event);
 
-}
-
-std::string Tracker::getSessionId() {
-    return id_;
 }
