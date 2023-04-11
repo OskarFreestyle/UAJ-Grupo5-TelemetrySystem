@@ -24,7 +24,7 @@ const std::string TrackerEvent::toJson() {
 	j["TimeSinceStart"] = timestamp_;
 	j["EventType"] = eventTypes[(int) eventType_];
 
-	return j.dump();
+	return j.dump(2);
 }
 
 const std::string TrackerEvent::toCSV() {
@@ -105,7 +105,7 @@ const std::string ReturnToBaseEvent::toJson() {
 	j["Sleep Option"] = sleepOption;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 
 }
 
@@ -161,7 +161,7 @@ const std::string FoodItemCraftedEvent::toJson() {
 	j["Can Craft Food Items"] = craft;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string FoodItemCraftedEvent::toCSV() {
@@ -217,7 +217,7 @@ const std::string ShipItemCraftedEvent::toJson() {
 	j["Craftable Ship Items"] = nCraftables;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string ShipItemCraftedEvent::toCSV() {
@@ -264,7 +264,7 @@ const std::string ActionUsedEvent::toJson() {
 	j["Actions Used"] = nActions;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string ActionUsedEvent::toCSV() {
@@ -304,7 +304,7 @@ const std::string EnterRaidMenuEvent::toJson() {
 	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string EnterRaidMenuEvent::toCSV() {
@@ -363,7 +363,7 @@ const std::string RaidSelectedEvent::toJson() {
 	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string RaidSelectedEvent::toCSV() {
@@ -404,7 +404,7 @@ const std::string ItemConsumedEvent::toJson() {
 	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump();
+	return parentJson + j.dump(2);
 }
 
 const std::string ItemConsumedEvent::toCSV() {
