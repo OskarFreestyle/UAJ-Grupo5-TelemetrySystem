@@ -2,7 +2,7 @@
 
 #include <string>
 #include <list>
-
+#include <functional>
 
 // Tipos de Eventos que recoge el tracker
 
@@ -16,6 +16,7 @@ enum class EventType {
 	ENTER_RAID_MENU,	// Entrada al menu de raid
 	RAID_SELECTED,      // Opcion de raid elegidas
 	ITEM_CONSUMED,		// Consumo de un item
+	POSITION,	        // Posicion del jugador u otro npc
 };	
 
 
@@ -28,7 +29,8 @@ const std::string eventTypes[] = {
 	"SHIP_ITEM_CRAFTED",
 	"ACTION_USED",
 	"RAID_SELECTED",
-	"ITEM_CONSUMED"
+	"ITEM_CONSUMED",
+	"POSITION"
 };
 
 
@@ -220,4 +222,42 @@ public:
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
 	virtual ItemConsumedEvent* clone();
+};
+
+
+
+// Evento uso de item
+class PositionEvent : public TrackerEvent {
+
+private:
+	float x;
+	float y;
+
+	std::string entity;
+
+public:
+	PositionEvent(float timestamp, std::string id);
+
+	PositionEvent* setPosition(float x, float y);
+	PositionEvent* setEntity(std::string name);
+
+	virtual const std::string toJson();
+	virtual const std::string toCSV();
+	virtual PositionEvent* clone();
+};
+
+
+
+class RecurringEvent {
+
+	friend class Tracker;
+private:
+	float interval;
+	float timer;
+
+	std::function<TrackerEvent*()> creator;
+
+	RecurringEvent(float interval, std::function<TrackerEvent* ()>);
+
+	void Update(float dt);
 };

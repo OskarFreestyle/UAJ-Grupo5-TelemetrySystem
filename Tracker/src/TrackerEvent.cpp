@@ -1,6 +1,7 @@
 #include "TrackerEvent.h"
 #include "nlohmann/json.hpp"
 #include "checkML.h"
+#include "Tracker.h"
 #include <sstream>
 
 using json = nlohmann::json;
@@ -420,6 +421,82 @@ ItemConsumedEvent* ItemConsumedEvent::clone() {
 	ItemConsumedEvent* e = new ItemConsumedEvent(timestamp_, id_);
 
 	e->setDay(day);
+
+	return e;
+}
+
+RecurringEvent::RecurringEvent(float interval, std::function<TrackerEvent* ()> func) {
+
+	timer = 0;
+	creator = func;
+	this->interval = interval;
+}
+
+#include <iostream>
+
+void RecurringEvent::Update(float dt)
+{
+	timer += dt;
+
+	if (timer > interval) {
+
+		std::cout << "Event created" << std::endl;
+
+		Tracker::Instance()->trackEvent(creator());
+
+		timer = 0;
+	}
+}
+
+PositionEvent::PositionEvent(float timestamp, std::string id): TrackerEvent(timestamp, id, EventType::POSITION)
+{
+	x = y = 0;
+}
+
+PositionEvent* PositionEvent::setPosition(float x, float y)
+{
+	this->x = x;
+	this->y = y;
+
+	std::cout << x << ", " << y << std::endl;
+
+	return this;
+}
+
+PositionEvent* PositionEvent::setEntity(std::string name)
+{
+	entity = name;
+	return this;
+}
+
+const std::string PositionEvent::toJson()
+{
+	std::string parentJson = TrackerEvent::toJson();
+
+	json j;
+	j["x"] = x;
+	j["y"] = x;
+	j["entity"] = entity;
+
+	return parentJson + j.dump();
+}
+
+const std::string PositionEvent::toCSV()
+{
+	std::string parentCSV = TrackerEvent::toCSV();
+
+	std::stringstream ss;
+	ss << parentCSV << ",x:" << x << ",y:" << y << ",entity:" << entity;
+
+	return ss.str();
+}
+
+PositionEvent* PositionEvent::clone()
+{
+	PositionEvent* e = new PositionEvent(timestamp_, id_);
+
+	e->setPosition(x, y);
+	e->setEntity(entity);
 
 	return e;
 }

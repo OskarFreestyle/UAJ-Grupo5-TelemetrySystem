@@ -1,5 +1,8 @@
 {
 
+  "dumpTime": 10,
+  "defaultRecurringInterval": 3,
+
   "data": [
     {
       "name": "SESSION_STARTED",
@@ -53,6 +56,12 @@
       "name": "ITEM_CONSUMED",
       "active": true,
       "index": 8
+    },
+    
+    {
+      "name": "POSITION",
+      "active": true,
+      "index": 9
     }
 
   ]
