@@ -16,5 +16,6 @@ public:
 	virtual std::string Format() = 0;
 
 	std::string prefix = "";
+	std::string interfix = "";
 	std::string sufix = "";
 };

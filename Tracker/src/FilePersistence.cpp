@@ -22,13 +22,14 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	}
 
 	eventsLogPath.append("\\" + sessionId + ".");
+
+	firstFlush = true;
+
 }
 
 FilePersistence::~FilePersistence() {}
 
-#include <iostream>
-
-void FilePersistence::Flush() {
+void FilePersistence::Flush(bool finalFlush) {
 
 	std::ofstream file;
 
@@ -37,7 +38,11 @@ void FilePersistence::Flush() {
 	path.append(eventsLogPath + s->Format());
 	file.open(path, std::ios::out | std::ios::app);
 
-	file << s->prefix;
+	// Si es la primera vez que se flushea se escribe la parte inicial del archivo
+	if (firstFlush) {
+		file << s->prefix;
+		firstFlush = false;
+	}
 
 	while (!events.empty()) {
 
@@ -46,12 +51,18 @@ void FilePersistence::Flush() {
 
 		std::string stringEvent = s->Serialize(event);
 
-		file << stringEvent << '\n';
+		file << stringEvent;
+
+		if (!(finalFlush && events.size() == 0))
+			file << s->interfix;
+
+		file << '\n';
 
 		TrackerEvent::DestroyEvent(event);
 	}
 
-	file << s->sufix;
+	if (finalFlush)
+		file << s->sufix;
 
 	file.close();
 

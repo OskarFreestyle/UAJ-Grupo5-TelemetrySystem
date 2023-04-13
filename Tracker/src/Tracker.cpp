@@ -132,7 +132,7 @@ void Tracker::End() {
     Timer::End();
 
     for (auto& pers : instance_->perstObjects_) {
-        pers->Flush();
+        pers->Flush(true);
     }
 
     if (instance_ != nullptr) {
@@ -157,7 +157,6 @@ void Tracker::trackEvent(TrackerEvent* event) {
     if (!event->isTrackable(eventsMaskBits_)) return;
 
     // Envia a todos los objetos de persistencia
-
     for (auto p : perstObjects_)
         p->sendEvent(event);
 
@@ -191,7 +190,7 @@ void Tracker::Update(float dt)
 
             for (auto& persistance : instance_->perstObjects_) {
 
-                persistance->Flush();
+                persistance->Flush(false);
             }
 
             instance_->dumpTimer = 0;

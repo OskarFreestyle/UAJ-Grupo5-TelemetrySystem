@@ -3,8 +3,9 @@
 
 JsonSerializer::JsonSerializer()
 {
-	prefix = "[\n";
-	sufix = "\n]";
+	prefix = "{\n\t\"events\": [\n";
+	interfix = ',';
+	sufix = "\t]\n}";
 }
 
 std::string JsonSerializer::Serialize(TrackerEvent* event) {

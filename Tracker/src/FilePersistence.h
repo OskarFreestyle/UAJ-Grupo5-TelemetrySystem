@@ -10,11 +10,12 @@ public:
 
 	~FilePersistence();
 
-	virtual void Flush();
+	virtual void Flush(bool finalFlush);
 
 private:
 	
 	std::string eventsLogPath;
+	bool firstFlush;
 
 };
 

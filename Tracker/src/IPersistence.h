@@ -16,14 +16,14 @@ public:
 		TrackerEvent* clone = trackerEvent->clone();
 		events.push(clone);
 
-		if (events.size() >= MAX_EVENTS_IN_QUEUE) Flush();
+		if (events.size() >= MAX_EVENTS_IN_QUEUE) Flush(false);
 	}
 
-	virtual void Flush() = 0;
+	virtual void Flush(bool finalFlush) = 0;
 
 protected:
 
 	std::queue<TrackerEvent*> events;
 
-	int MAX_EVENTS_IN_QUEUE = 1;
+	int MAX_EVENTS_IN_QUEUE = 10;
 };

@@ -32,7 +32,7 @@ const std::string TrackerEvent::toCSV() {
 
 	std::string time = std::to_string(timestamp_);
 
-	return "id: " + id_ + ",time:" + time + ",eventType:" + eventTypes[(int)eventType_];
+	return "id:" + id_ + ",time:" + time + ",eventType:" + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {
