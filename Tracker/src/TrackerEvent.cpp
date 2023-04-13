@@ -75,29 +75,29 @@ SessionEndEvent* SessionEndEvent::clone() {
 
 // ------------------- ReturnBaseEvent -----------------------
 
-ReturnToBaseEvent::ReturnToBaseEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::RETURNED_TO_BASE) {
+LeaveBaseEvent::LeaveBaseEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
 	fatigue = sleepOption = day = 0;
 }
 
-ReturnToBaseEvent* ReturnToBaseEvent::setFatigue(int fatigue) {
+LeaveBaseEvent* LeaveBaseEvent::setFatigue(int fatigue) {
 	this->fatigue = fatigue;
 
 	return this;
 }
 
-ReturnToBaseEvent* ReturnToBaseEvent::setSleepOption(int sleepOption) {
+LeaveBaseEvent* LeaveBaseEvent::setSleepOption(int sleepOption) {
 	this->sleepOption = sleepOption;
 
 	return this;
 }
 
-ReturnToBaseEvent* ReturnToBaseEvent::setDay(int day) {
+LeaveBaseEvent* LeaveBaseEvent::setDay(int day) {
 	this->day = day;
 
 	return this;
 }
 
-const std::string ReturnToBaseEvent::toJson() {
+const std::string LeaveBaseEvent::toJson() {
 
 	std::string parentJson = TrackerEvent::toJson();
 
@@ -110,7 +110,7 @@ const std::string ReturnToBaseEvent::toJson() {
 
 }
 
-const std::string ReturnToBaseEvent::toCSV() {
+const std::string LeaveBaseEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
@@ -119,8 +119,8 @@ const std::string ReturnToBaseEvent::toCSV() {
 	return ss.str();
 }
 
-ReturnToBaseEvent* ReturnToBaseEvent::clone() {
-	ReturnToBaseEvent* e = new ReturnToBaseEvent(timestamp_, id_);
+LeaveBaseEvent* LeaveBaseEvent::clone() {
+	LeaveBaseEvent* e = new LeaveBaseEvent(timestamp_, id_);
 
 	e->setFatigue(fatigue)->setSleepOption(sleepOption)->setDay(day);
 

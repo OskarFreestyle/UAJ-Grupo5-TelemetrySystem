@@ -9,7 +9,7 @@
 enum class EventType { 
 	SESSION_STARTED,	// Comienzo de la sesion
 	SESSION_ENDED,		// Fin de la sesion
-	RETURNED_TO_BASE,	// Vuelta de una raid al refugio
+	LEAVE_BASE,	// Vuelta de una raid al refugio
 	FOOD_ITEM_CRAFTED,	// Crafteo de items de comida
 	SHIP_ITEM_CRAFTED,  // Crafteo de item de nave
 	ACTION_USED,		// Uso de una accion
@@ -24,7 +24,7 @@ enum class EventType {
 const std::string eventTypes[] = {
 	"SESSION_STARTED", //0
 	"SESSION_ENDED",//1
-	"RETURNED_TO_BASE",//2
+	"LEAVE_BASE",//2
 	"FOOD_ITEM_CRAFTED",//3
 	"SHIP_ITEM_CRAFTED",//4
 	"ACTION_USED",//5
@@ -80,7 +80,7 @@ public:
 
 
 // Evento sueño al llegar al refugio
-class ReturnToBaseEvent : public TrackerEvent {
+class LeaveBaseEvent : public TrackerEvent {
 private:
 
 	int fatigue;	    // Sueño al llegar al refugio
@@ -89,15 +89,15 @@ private:
 
 public:
 
-	ReturnToBaseEvent(float timestamp, std::string id);
+	LeaveBaseEvent(float timestamp, std::string id);
 
-	ReturnToBaseEvent* setFatigue(int fatigue);
-	ReturnToBaseEvent* setSleepOption(int sleepOption);
-	ReturnToBaseEvent* setDay(int day);
+	LeaveBaseEvent* setFatigue(int fatigue);
+	LeaveBaseEvent* setSleepOption(int sleepOption);
+	LeaveBaseEvent* setDay(int day);
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual ReturnToBaseEvent* clone();
+	virtual LeaveBaseEvent* clone();
 };
 
 

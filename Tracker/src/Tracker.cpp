@@ -94,8 +94,8 @@ SessionEndEvent* Tracker::createSessionEndEvent() {
     return new SessionEndEvent(Timer::Instance()->getTimeSinceStart(), instance_->id_);
 }
 
-ReturnToBaseEvent* Tracker::createReturnedToBaseEvent() {
-    return new ReturnToBaseEvent(Timer::Instance()->getTimeSinceStart(), instance_->id_);
+LeaveBaseEvent* Tracker::createLeaveBaseEvent() {
+    return new LeaveBaseEvent(Timer::Instance()->getTimeSinceStart(), instance_->id_);
 }
 
 FoodItemCraftedEvent* Tracker::createFoodItemCraftedEvent() {
