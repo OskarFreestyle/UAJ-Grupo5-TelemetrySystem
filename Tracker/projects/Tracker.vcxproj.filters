@@ -18,9 +18,6 @@
     <ClInclude Include="..\src\checkML.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ConcurrentQueue.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\FilePersistence.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>

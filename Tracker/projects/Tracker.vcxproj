@@ -97,7 +97,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\checkML.h" />
-    <ClInclude Include="..\src\ConcurrentQueue.h" />
     <ClInclude Include="..\src\CSVSerializer.h" />
     <ClInclude Include="..\src\FilePersistence.h" />
     <ClInclude Include="..\src\IPersistence.h" />
