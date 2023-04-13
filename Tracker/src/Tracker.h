@@ -66,7 +66,7 @@ public:
     // Factoria de eventos
     static SessionStartEvent* createSessionStartEvent();
     static SessionEndEvent* createSessionEndEvent();
-    static ReturnToBaseEvent* createReturnedToBaseEvent();
+    static LeaveBaseEvent* createLeaveBaseEvent();
     static FoodItemCraftedEvent* createFoodItemCraftedEvent();
     static ShipItemCraftedEvent* createShipItemCraftedEvent();
     static ActionUsedEvent* createActionUsedEvent();
