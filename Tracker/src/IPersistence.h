@@ -10,7 +10,7 @@ class IPersistence {
 public:
 
 	IPersistence(int maxEventsInQueue): MAX_EVENTS_IN_QUEUE(maxEventsInQueue) {};
-	virtual ~IPersistence() {};
+	virtual ~IPersistence() { };
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
 		TrackerEvent* clone = trackerEvent->clone();

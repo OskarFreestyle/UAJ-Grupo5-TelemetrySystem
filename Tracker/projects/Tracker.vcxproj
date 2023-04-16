@@ -115,6 +115,7 @@
     <ClCompile Include="..\src\Timer.cpp" />
     <ClCompile Include="..\src\Tracker.cpp" />
     <ClCompile Include="..\src\TrackerEvent.cpp" />
+    <ClCompile Include="TrackerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\events.json" />

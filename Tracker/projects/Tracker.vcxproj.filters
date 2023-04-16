@@ -68,6 +68,9 @@
     <ClCompile Include="..\src\CSVSerializer.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="TrackerTest.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\data\events.json" />

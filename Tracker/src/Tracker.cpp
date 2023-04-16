@@ -34,6 +34,13 @@ Tracker::Tracker() {
 
 Tracker::~Tracker() {
 
+
+    for (auto rec : recurringEvents) {
+        delete rec;
+    }
+    recurringEvents.clear();
+
+
     for (auto it = perstObjects_.begin(); it != perstObjects_.end(); ++it)
         delete (*it);
 
@@ -131,6 +138,7 @@ void Tracker::End() {
 
     Timer::End();
 
+
     for (auto& pers : instance_->perstObjects_) {
         pers->Flush(true);
     }
@@ -154,8 +162,11 @@ Tracker* Tracker::Instance() {
 void Tracker::trackEvent(TrackerEvent* event) {
 
     // Si el evento no es trackeable se descarta
-    if (!event->isTrackable(eventsMaskBits_)) return;
-
+    if (!event->isTrackable(eventsMaskBits_))
+    {
+        TrackerEvent::DestroyEvent(event);
+        return;
+    }
     // Envia a todos los objetos de persistencia
     for (auto p : perstObjects_)
         p->sendEvent(event);

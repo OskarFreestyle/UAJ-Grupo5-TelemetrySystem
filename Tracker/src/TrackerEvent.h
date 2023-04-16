@@ -39,7 +39,7 @@ class TrackerEvent {
 
 public:
 	TrackerEvent(double timestamp, std::string id, EventType eventType);
-
+	virtual ~TrackerEvent() {};
 	virtual TrackerEvent* clone() = 0;
 	virtual const std::string toJson();
 	virtual const std::string toCSV();

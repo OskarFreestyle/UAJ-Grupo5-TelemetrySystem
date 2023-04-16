@@ -7,6 +7,7 @@
 #include <direct.h>
 #include <cassert>
 #include <io.h>
+#include "checkML.h"
 
 FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sessionId) : IPersistence(maxElementsInQueue) {
 
