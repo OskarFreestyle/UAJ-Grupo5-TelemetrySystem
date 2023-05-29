@@ -137,17 +137,17 @@ void Tracker::Update(float dt) {
 }
 
 
-RecurringEventsManager* Tracker::AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval) {
+RecurringEvent* Tracker::AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval) {
 
     // Si no se especifica intervalo entre eventos, se establece el intervalo por defecto
     if (interval == -1) interval = defaultRecurringInterval;
 
-    RecurringEventsManager* ev = new RecurringEventsManager(funct, interval);
+    RecurringEvent* ev = new RecurringEvent(funct, interval);
     recurringEvents.push_back(ev);
     return ev;
 }
 
-bool Tracker::RemoveRecurringEvent(RecurringEventsManager* ev) {
+bool Tracker::RemoveRecurringEvent(RecurringEvent* ev) {
 
     int size = recurringEvents.size();
     recurringEvents.remove(ev);

@@ -31,7 +31,7 @@ private:
     std::list<IPersistence*> perstObjects_;
 
 
-    std::list<RecurringEventsManager*> recurringEvents;
+    std::list<RecurringEvent*> recurringEvents;
 
     std::list<std::string> serializersToUse;
 
@@ -61,8 +61,6 @@ public:
     // Evitamos asignar objetos de la clase Tracker
     void operator=(const Tracker&) = delete;
     
-    static ISerializer* GetSerializer();
-
     /// <summary>
     /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
     /// </summary>
@@ -89,7 +87,7 @@ public:
     static PositionEvent* createPositionEvent();
 
     // Tracking de eventos periodicos
-    RecurringEventsManager* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
-    bool RemoveRecurringEvent(RecurringEventsManager* event);
+    RecurringEvent* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
+    bool RemoveRecurringEvent(RecurringEvent* event);
 };
 

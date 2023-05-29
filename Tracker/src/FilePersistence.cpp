@@ -41,48 +41,52 @@ FilePersistence::~FilePersistence() {}
 void FilePersistence::createFilePerEventType()
 {
 	std::ofstream file;
-	auto s = Tracker::GetSerializer();
+	for (const auto& serializerPair : serializers_) {
+		ISerializer* s = serializerPair.second;
 
-	int i = 0;
-	for (auto eventType : eventTypes)
-	{
-		std::string path;
-		path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
+		int i = 0;
+		for (auto eventType : eventTypes)
+		{
+			std::string path;
+			path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
 
-		std::cout << "Create: " << eventTypes[i] << std::endl;
+			std::cout << "Create: " << eventTypes[i] << std::endl;
 
-		// Crea el archivo
-		file.open(path, std::ios::out | std::ios::app);
+			// Crea el archivo
+			file.open(path, std::ios::out | std::ios::app);
 
-		// Se escribe la parte inicial del archivo
-		file << s->prefix;
+			// Se escribe la parte inicial del archivo
+			file << s->prefix;
 
-		file.close();
-		i++;
+			file.close();
+			i++;
+		}
 	}
 }
 
 void FilePersistence::addSufixToEveryFile()
 {
 	std::ofstream file;
-	auto s = Tracker::GetSerializer();
+	for (const auto& serializerPair : serializers_) {
+		ISerializer* s = serializerPair.second;
 
-	int i = 0;
-	for (auto eventType : eventTypes)
-	{
-		std::string path;
-		path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
+		int i = 0;
+		for (auto eventType : eventTypes)
+		{
+			std::string path;
+			path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
 
-		std::cout << "Sufixed: " << eventTypes[i] << std::endl;
+			std::cout << "Sufixed: " << eventTypes[i] << std::endl;
 
-		// Crea el archivo
-		file.open(path, std::ios::out | std::ios::app);
+			// Crea el archivo
+			file.open(path, std::ios::out | std::ios::app);
 
-		// Se escribe la parte inicial del archivo
-		file << s->sufix;
+			// Se escribe la parte inicial del archivo
+			file << s->sufix;
 
-		file.close();
-		i++;
+			file.close();
+			i++;
+		}
 	}
 }
 

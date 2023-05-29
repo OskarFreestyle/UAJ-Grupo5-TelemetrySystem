@@ -51,14 +51,14 @@ void TrackerEvent::DestroyEvent(TrackerEvent* event) {
 
 // --------------------- Eventos periodicos ------------------------
 
-RecurringEventsManager::RecurringEventsManager(std::function<TrackerEvent* ()> func, float interval) {
+RecurringEvent::RecurringEvent(std::function<TrackerEvent* ()> func, float interval) {
 
 	timer = 0;
 	creator = func;
 	this->interval = interval;
 }
 
-void RecurringEventsManager::Update(float dt) {
+void RecurringEvent::Update(float dt) {
 
 	timer += dt;
 
@@ -122,14 +122,13 @@ LeaveBaseEvent* LeaveBaseEvent::setDay(int day) {
 
 const std::string LeaveBaseEvent::toJson() {
 
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Fatigue"] = fatigue;
 	j["Sleep Option"] = sleepOption;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 
 }
 
@@ -178,14 +177,13 @@ FoodItemCraftedEvent* FoodItemCraftedEvent::setDay(int day) {
 }
 
 const std::string FoodItemCraftedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Hunger"] = hunger;
 	j["Can Craft Food Items"] = craft;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string FoodItemCraftedEvent::toCSV() {
@@ -234,14 +232,13 @@ ShipItemCraftedEvent* ShipItemCraftedEvent::setDay(int day) {
 
 
 const std::string ShipItemCraftedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Ship Items Crafted"] = nCrafted;
 	j["Craftable Ship Items"] = nCraftables;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ShipItemCraftedEvent::toCSV() {
@@ -282,13 +279,12 @@ ActionUsedEvent* ActionUsedEvent::setDay(int day) {
 }
 
 const std::string ActionUsedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Actions Used"] = nActions;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ActionUsedEvent::toCSV() {
@@ -323,12 +319,11 @@ EnterRaidMenuEvent* EnterRaidMenuEvent::setDay(int day) {
 }
 
 const std::string EnterRaidMenuEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string EnterRaidMenuEvent::toCSV() {
@@ -382,12 +377,11 @@ RaidSelectedEvent* RaidSelectedEvent::setDay(int day) {
 }
 
 const std::string RaidSelectedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string RaidSelectedEvent::toCSV() {
@@ -423,12 +417,11 @@ ItemConsumedEvent* ItemConsumedEvent::setDay(int day) {
 
 
 const std::string ItemConsumedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ItemConsumedEvent::toCSV() {

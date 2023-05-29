@@ -68,11 +68,11 @@ protected:
 * 
 * Util para trackear posicion de entidades, vida del jugador... etc.
 */
-class RecurringEventsManager {
+class RecurringEvent {
 
 public: 
 
-	RecurringEventsManager(std::function<TrackerEvent* ()> func, float interval);
+	RecurringEvent(std::function<TrackerEvent* ()> func, float interval);
 
 	void Update(float dt);
 
