@@ -22,29 +22,30 @@ private:
     std::string id_;
 
     // Mascara para representar que eventos se van a trackear
-    uint16_t eventsMaskBits_;
+    uint16_t eventsBitMask_;
 
-    // Genera la mascara de bits a partir de la lectura del JSON
-    void ReadConfigurationFile();
-
-    // Genera un id de sesion aplicando sha256 a una cadena sacada a partir del tiempo actual
-    void generateSessionId();
-
-    std::unordered_map<std::string, ISerializer*> serializers_;
+    // Numero maximo de eventos en la cola al mismo tiempo
+    int maxElementsInQueue;
 
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
-    std::list<RecurringEvent*> recurringEvents;
+
+            std::unordered_map<std::string, ISerializer*> serializers_;
+
+            std::list<RecurringEventsManager*> recurringEvents;
+
+            std::string currentSerializer;
+
+            float defaultRecurringInterval;
 
 
-    std::string currentSerializer;
-    int maxElementsInQueue;
+    // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
+    void readConfigurationFile();
 
-    float dumpTimer;
-    float dumpTime;
+    // Genera un id de sesion aplicando sha256 a una cadena obtenida a partir del tiempo actual
+    void generateSessionId();
 
-    float defaultRecurringInterval;
 public:
 
     // Evitamos copiar objetos de la clase Tracker
@@ -53,28 +54,14 @@ public:
     // Evitamos asignar objetos de la clase Tracker
     void operator=(const Tracker&) = delete;
 
-
-    static ISerializer* GetSerializer();
+    
+            static ISerializer* GetSerializer();
 
 
     /// <summary>
     /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
     /// </summary>
     static void Update(float dt);
-
-
-    // Factoria de eventos
-    static SessionStartEvent* createSessionStartEvent();
-    static SessionEndEvent* createSessionEndEvent();
-    static LeaveBaseEvent* createLeaveBaseEvent();
-    static FoodItemCraftedEvent* createFoodItemCraftedEvent();
-    static ShipItemCraftedEvent* createShipItemCraftedEvent();
-    static ActionUsedEvent* createActionUsedEvent();
-    static EnterRaidMenuEvent* createEnterRaidMenuEvent();
-    static RaidSelectedEvent* createRaidSelectedEvent();
-    static ItemConsumedEvent* createItemConsumedEvent();
-    static PositionEvent* createPositionEvent();
-
 
     /// <summary>
     /// Libera los recursos del tracker, persistiendo antes todos los eventos de la cola
@@ -93,9 +80,21 @@ public:
     void trackEvent(TrackerEvent* event);
 
 
-    RecurringEvent* AddRecurringEvent(float interval, std::function<TrackerEvent* ()> funct);
-    RecurringEvent* AddRecurringEvent(std::function<TrackerEvent*()> funct);
-    bool RemoveRecurringEvent(RecurringEvent* event);
+    // Factoria de eventos
+    static SessionStartEvent* createSessionStartEvent();
+    static SessionEndEvent* createSessionEndEvent();
+    static LeaveBaseEvent* createLeaveBaseEvent();
+    static FoodItemCraftedEvent* createFoodItemCraftedEvent();
+    static ShipItemCraftedEvent* createShipItemCraftedEvent();
+    static ActionUsedEvent* createActionUsedEvent();
+    static EnterRaidMenuEvent* createEnterRaidMenuEvent();
+    static RaidSelectedEvent* createRaidSelectedEvent();
+    static ItemConsumedEvent* createItemConsumedEvent();
+    static PositionEvent* createPositionEvent();
+
+    // Tracking de eventos periodicos
+    RecurringEventsManager* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
+    bool RemoveRecurringEvent(RecurringEventsManager* event);
 
 };
 

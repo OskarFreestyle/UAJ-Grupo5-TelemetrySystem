@@ -4,12 +4,13 @@
 #include <list>
 #include <functional>
 
+
 // Tipos de Eventos que recoge el tracker
 
 enum class EventType { 
 	SESSION_STARTED,	// Comienzo de la sesion
 	SESSION_ENDED,		// Fin de la sesion
-	LEAVE_BASE,	// Vuelta de una raid al refugio
+	LEAVE_BASE,			// Vuelta de una raid al refugio
 	FOOD_ITEM_CRAFTED,	// Crafteo de items de comida
 	SHIP_ITEM_CRAFTED,  // Crafteo de item de nave
 	ACTION_USED,		// Uso de una accion
@@ -35,6 +36,7 @@ const std::string eventTypes[] = {
 };
 
 
+// Clase padre para representar un evento con la informacion base
 class TrackerEvent {
 
 public:
@@ -56,6 +58,30 @@ protected:
 	std::string id_;
 	EventType eventType_;
 	uint16_t maskBits_;
+
+};
+
+/*
+* Clase para manejar eventos periodicos.
+* 
+* Recibe un evento como parametro para ser trackeado periodicamente.
+* 
+* Util para trackear posicion de entidades, vida del jugador... etc.
+*/
+class RecurringEventsManager {
+
+public: 
+
+	RecurringEventsManager(std::function<TrackerEvent* ()> func, float interval);
+
+	void Update(float dt);
+
+private:
+
+	float interval;
+	float timer;
+
+	std::function<TrackerEvent* ()> creator;
 
 };
 
@@ -225,7 +251,7 @@ public:
 
 
 
-// Evento uso de item
+// Evento posicion actual de una entidad de juego
 class PositionEvent : public TrackerEvent {
 
 private:
@@ -243,20 +269,4 @@ public:
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
 	virtual PositionEvent* clone();
-};
-
-
-
-class RecurringEvent {
-
-	friend class Tracker;
-private:
-	float interval;
-	float timer;
-
-	std::function<TrackerEvent*()> creator;
-
-	RecurringEvent(float interval, std::function<TrackerEvent* ()>);
-
-	void Update(float dt);
 };

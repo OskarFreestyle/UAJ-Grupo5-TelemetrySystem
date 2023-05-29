@@ -1,5 +1,3 @@
-
-
 #include <iostream>
 #include <memory>
 #include "../src/Tracker.h"
@@ -10,14 +8,12 @@ int main() {
 
 	std::cout << "Tracker test" << std::endl;
 
-
 	Tracker::Instance();
-
 
 	Tracker::Instance()->trackEvent(Tracker::createActionUsedEvent()->setDay(2));
 	Tracker::Instance()->trackEvent(Tracker::createRaidSelectedEvent());
 
-
 	Tracker::End();
+
 	return 0;
 }

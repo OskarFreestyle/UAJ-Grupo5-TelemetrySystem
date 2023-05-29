@@ -1,8 +1,7 @@
 #include "JsonSerializer.h"
 #include "TrackerEvent.h"
 
-JsonSerializer::JsonSerializer()
-{
+JsonSerializer::JsonSerializer() {
 	prefix = "{\n\t\"events\": [\n";
 	interfix = ',';
 	sufix = "\t]\n}";

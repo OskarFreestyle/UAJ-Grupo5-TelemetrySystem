@@ -118,7 +118,7 @@
     <ClCompile Include="TrackerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\events.json" />
+    <None Include="..\data\configure.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

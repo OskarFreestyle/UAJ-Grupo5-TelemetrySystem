@@ -49,6 +49,29 @@ void TrackerEvent::DestroyEvent(TrackerEvent* event) {
 
 
 
+// --------------------- Eventos periodicos ------------------------
+
+RecurringEventsManager::RecurringEventsManager(std::function<TrackerEvent* ()> func, float interval) {
+
+	timer = 0;
+	creator = func;
+	this->interval = interval;
+}
+
+void RecurringEventsManager::Update(float dt) {
+
+	timer += dt;
+
+	if (timer > interval) {
+
+		Tracker::Instance()->trackEvent(creator());
+
+		timer = 0;
+	}
+}
+
+
+
 
 // ------------------- SessionStartEvent -----------------------
 
@@ -425,44 +448,29 @@ ItemConsumedEvent* ItemConsumedEvent::clone() {
 	return e;
 }
 
-RecurringEvent::RecurringEvent(float interval, std::function<TrackerEvent* ()> func) {
 
-	timer = 0;
-	creator = func;
-	this->interval = interval;
-}
+// -------------------- Position Event -----------------------
 
-void RecurringEvent::Update(float dt)
-{
-	timer += dt;
-
-	if (timer > interval) {
-
-		Tracker::Instance()->trackEvent(creator());
-
-		timer = 0;
-	}
-}
-
-PositionEvent::PositionEvent(float timestamp, std::string id): TrackerEvent(timestamp, id, EventType::POSITION)
-{
+PositionEvent::PositionEvent(float timestamp, std::string id): TrackerEvent(timestamp, id, EventType::POSITION) {
 	x = y = 0;
 }
-PositionEvent* PositionEvent::setPosition(float x, float y)
-{
+
+PositionEvent* PositionEvent::setPosition(float x, float y) {
+
 	this->x = x;
 	this->y = y;
 
 	return this;
 }
 
-PositionEvent* PositionEvent::setEntity(std::string name)
-{
+PositionEvent* PositionEvent::setEntity(std::string name) {
+
 	entity = name;
 	return this;
 }
-const std::string PositionEvent::toJson()
-{
+
+const std::string PositionEvent::toJson() {
+
 	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
 	j["x"] = x;
@@ -472,8 +480,8 @@ const std::string PositionEvent::toJson()
 	return j.dump(2);
 }
 
-const std::string PositionEvent::toCSV()
-{
+const std::string PositionEvent::toCSV() {
+
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
@@ -482,8 +490,8 @@ const std::string PositionEvent::toCSV()
 	return ss.str();
 }
 
-PositionEvent* PositionEvent::clone()
-{
+PositionEvent* PositionEvent::clone() {
+
 	PositionEvent* e = new PositionEvent(timestamp_, id_);
 
 	e->setPosition(x, y);

@@ -73,6 +73,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\data\events.json" />
+    <None Include="..\data\configure.json" />
   </ItemGroup>
 </Project>

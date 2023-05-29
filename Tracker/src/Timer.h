@@ -5,16 +5,16 @@
 class Timer {
 
 private:
-	static Timer* instance;
-	time_t startTime;
 
-	Timer();
-	~Timer();
+	Timer() {};
+	~Timer() {};
+
+	static Timer* instance;
+
 public:
 	static Timer* Instance();
 	static void End();
 
-	float getTimeSinceStart();
 	time_t getTimeNow();
 };
 
