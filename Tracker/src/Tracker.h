@@ -31,13 +31,11 @@ private:
     std::list<IPersistence*> perstObjects_;
 
 
-            std::unordered_map<std::string, ISerializer*> serializers_;
+    std::list<RecurringEventsManager*> recurringEvents;
 
-            std::list<RecurringEventsManager*> recurringEvents;
+    std::list<std::string> serializersToUse;
 
-            std::string currentSerializer;
-
-            float defaultRecurringInterval;
+    float defaultRecurringInterval;
 
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
@@ -53,10 +51,6 @@ public:
 
     // Evitamos asignar objetos de la clase Tracker
     void operator=(const Tracker&) = delete;
-
-    
-            static ISerializer* GetSerializer();
-
 
     /// <summary>
     /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores

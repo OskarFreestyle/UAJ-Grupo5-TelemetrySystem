@@ -23,11 +23,7 @@ Tracker::Tracker() {
 
     readConfigurationFile();
 
-    // Se crean los serializadores y los objetos de persistencia
-    serializers_["json"] = new JsonSerializer();
-    serializers_["csv"] = new CSVSerializer();
-
-    perstObjects_.push_back(new FilePersistence(maxElementsInQueue, id_));
+    perstObjects_.push_back(new FilePersistence(maxElementsInQueue, id_, serializersToUse));
 }
 
 Tracker::~Tracker() {
@@ -43,13 +39,7 @@ Tracker::~Tracker() {
         delete (*it);
 
     perstObjects_.clear();
-       
-            // Se eliminan los serializadores
-            for (auto& ser : serializers_)
-                delete ser.second;
-
-            serializers_.clear();
-
+      
     std::cout << "Tracker destruido con exito!" << std::endl;
 }
 
@@ -73,7 +63,16 @@ void Tracker::readConfigurationFile() {
 
     defaultRecurringInterval = j.contains("defaultRecurringInterval") ? j["defaultRecurringInterval"].get<float>() : 10;
     maxElementsInQueue = j.contains("maxElementsInQueue") ? j["maxElementsInQueue"].get<int>() : 10;
-    currentSerializer = j.contains("serializer") ? j["serializer"].get<std::string>() : "json";
+    
+    if (j.contains("serializers")) {
+        for (const auto& serializer : j["serializers"]) {
+            serializersToUse.push_back(serializer.get<std::string>());
+        }
+    }
+    else {
+        // Default serializers
+        serializersToUse = { "json", "csv" };
+    }
 }
 
 void Tracker::generateSessionId() {
@@ -131,19 +130,6 @@ void Tracker::trackEvent(TrackerEvent* event) {
     TrackerEvent::DestroyEvent(event);
 
 }
-
-ISerializer* Tracker::GetSerializer() {
-    std::string current = instance_->currentSerializer;
-    std::unordered_map<std::string, ISerializer*>& serializer = instance_->serializers_;
-
-
-    if (serializer.contains(current)) {
-        return serializer[current];
-    }
-
-    return serializer["json"];
-}
-
 
 void Tracker::Update(float dt) {
 

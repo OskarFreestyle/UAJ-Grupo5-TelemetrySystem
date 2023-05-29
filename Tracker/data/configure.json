@@ -1,5 +1,5 @@
 {
-  "serializer": "json", 
+  "serializers": ["json", "csv"], 
   "maxElementsInQueue": 10, 
   "defaultRecurringInterval": 3,
 
