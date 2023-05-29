@@ -94,7 +94,6 @@ void FilePersistence::Flush(bool finalFlush) {
 
 	for (const auto& serializerPair : serializers_) {
 		ISerializer* s = serializerPair.second;
-		firstFlush = true;
 
 		// Si es el primer flush
 		if (firstFlush) {
