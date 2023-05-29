@@ -6,7 +6,6 @@
 
 using json = nlohmann::json;
 
-
 // -------------------------- Clase padre -----------------------
 
 TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventType) {

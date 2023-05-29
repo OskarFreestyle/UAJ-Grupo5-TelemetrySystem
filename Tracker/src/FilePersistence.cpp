@@ -2,8 +2,10 @@
 #include "TrackerEvent.h"
 #include "Tracker.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <sstream>
+#include <vector>
 #include <direct.h>
 #include <cassert>
 #include <io.h>
@@ -34,6 +36,11 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	//eventsLogPath.append("\\" + sessionId + ".");
 
 	firstFlush = true;
+	
+	for (auto type : eventTypes)
+	{
+		firstEventPerType[type] = true;
+	}
 }
 
 FilePersistence::~FilePersistence() {}
@@ -112,11 +119,14 @@ void FilePersistence::Flush(bool finalFlush) {
 			// Se serializa
 			std::string stringEvent = s->Serialize(event);
 
-			// Se persiste en el archivo
-			file << stringEvent;
-
-			if (!(finalFlush && events.size() == 0))
+			if (firstEventPerType[eventTypes[(int)event->getType()]]) {
+				firstEventPerType[eventTypes[(int)event->getType()]] = false;
+			}
+			else {
 				file << s->interfix;
+			}
+
+			file << stringEvent;
 
 			file << '\n';
 

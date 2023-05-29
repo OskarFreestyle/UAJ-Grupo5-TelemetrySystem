@@ -58,7 +58,6 @@ protected:
 	std::string id_;
 	EventType eventType_;
 	uint16_t maskBits_;
-
 };
 
 /*
