@@ -23,16 +23,16 @@ enum class EventType {
 
 // Enum -> String (Comodidad)
 const std::string eventTypes[] = {
-	"SESSION_STARTED", //0
-	"SESSION_ENDED",//1
-	"LEAVE_BASE",//2
+	"SESSION_STARTED",	//0
+	"SESSION_ENDED",	//1
+	"LEAVE_BASE",		//2
 	"FOOD_ITEM_CRAFTED",//3
 	"SHIP_ITEM_CRAFTED",//4
-	"ACTION_USED",//5
-	"ENTER_RAID_MENU",//6
-	"RAID_SELECTED",//7
-	"ITEM_CONSUMED",//8
-	"POSITION"//9,
+	"ACTION_USED",		//5
+	"ENTER_RAID_MENU",	//6
+	"RAID_SELECTED",	//7
+	"ITEM_CONSUMED",	//8
+	"POSITION"			//9,
 };
 
 

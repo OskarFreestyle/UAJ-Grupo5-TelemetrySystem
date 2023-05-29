@@ -30,14 +30,13 @@ private:
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
-
-            std::unordered_map<std::string, ISerializer*> serializers_;
-
-            std::list<RecurringEventsManager*> recurringEvents;
-
-            std::string currentSerializer;
-
-            float defaultRecurringInterval;
+    std::unordered_map<std::string, ISerializer*> serializers_;
+    
+    std::list<RecurringEventsManager*> recurringEvents;
+    
+    std::string currentSerializer;
+    
+    float defaultRecurringInterval;
 
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
@@ -47,31 +46,29 @@ private:
     void generateSessionId();
 
 public:
-
-    // Evitamos copiar objetos de la clase Tracker
-    Tracker(Tracker& other) = delete;
-
-    // Evitamos asignar objetos de la clase Tracker
-    void operator=(const Tracker&) = delete;
-
-    
-            static ISerializer* GetSerializer();
-
-
     /// <summary>
-    /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
+    /// Devuelve la instancia del singleton
     /// </summary>
-    static void Update(float dt);
+    static Tracker* Instance();
 
     /// <summary>
     /// Libera los recursos del tracker, persistiendo antes todos los eventos de la cola
     /// </summary>
     static void End();
 
+    // Evitamos copiar objetos de la clase Tracker
+    Tracker(Tracker& other) = delete;
+
+    // Evitamos asignar objetos de la clase Tracker
+    void operator=(const Tracker&) = delete;
+    
+    static ISerializer* GetSerializer();
+
     /// <summary>
-    /// Devuelve la instancia del singleton
+    /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
     /// </summary>
-    static Tracker* Instance();
+    static void Update(float dt);
+
 
     /// <summary>
     /// Si el eventos es trackeable, lo envia a los objetos de persistencia
@@ -95,6 +92,5 @@ public:
     // Tracking de eventos periodicos
     RecurringEventsManager* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
     bool RemoveRecurringEvent(RecurringEventsManager* event);
-
 };
 
