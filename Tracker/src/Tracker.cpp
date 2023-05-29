@@ -15,8 +15,31 @@ using json = nlohmann::json;
 // Referencia estatica para el singleton
 Tracker* Tracker::instance_ = nullptr;
 
-Tracker::Tracker() {
+Tracker* Tracker::Instance() {
+    // Si el singleton no existe lo crea
+    if (instance_ == nullptr)
+        instance_ = new Tracker();
 
+    return instance_;
+}
+
+void Tracker::End() {
+    // Se destruye el timer
+    Timer::End();
+
+    // Se acaban de persistir los objetos que queden
+    for (auto& pers : instance_->perstObjects_) {
+        pers->Flush(true);
+    }
+
+    // Se borra la instancia del singleton
+    if (instance_ != nullptr) {
+        delete instance_;
+        instance_ = nullptr;
+    }
+}
+
+Tracker::Tracker() {
     std::cout << "Tracker construido con exito!" << std::endl;
 
     generateSessionId();
@@ -56,7 +79,7 @@ void Tracker::readConfigurationFile() {
         bool active = item.at("active");
         int index = item.at("index");
 
-        // Si el evento esta marcado como trackeable se añade a la mascara
+        // Si el evento esta marcado como trackeable se aï¿½ade a la mascara
         if (active)
             eventsBitMask_ += std::pow(2, index);
     }
@@ -76,9 +99,10 @@ void Tracker::readConfigurationFile() {
 }
 
 void Tracker::generateSessionId() {
+    // Se inicia el timer
     time_t now = Timer::Instance()->getTimeNow();
 
-    // El numero en bytes que necesita el buffer para que la función ctime_s funcione correctamente son 26
+    // El numero en bytes que necesita el buffer para que la funciï¿½n ctime_s funcione correctamente son 26
     const std::size_t buffer_size = 26;
 
     char dt[buffer_size]; 
@@ -87,29 +111,6 @@ void Tracker::generateSessionId() {
     id_ = sha256(dt);
 
     std::cout << "Identificador de la sesion: " << id_ << " generado con SHA-256 a partir de la fecha actual: " << dt << std::endl;
-}
-
-void Tracker::End() {
-
-    Timer::End();
-
-    for (auto& pers : instance_->perstObjects_) {
-        pers->Flush(true);
-    }
-
-    if (instance_ != nullptr) {
-        delete instance_;
-        instance_ = nullptr;
-    }
-}
-
-Tracker* Tracker::Instance() {
-
-    if (instance_ == nullptr)
-        instance_ = new Tracker();
-
-    return instance_;
-
 }
 
 
@@ -128,14 +129,11 @@ void Tracker::trackEvent(TrackerEvent* event) {
 
     // Destruye el evento ya que los objetos de persistencia lo clonan
     TrackerEvent::DestroyEvent(event);
-
 }
 
 void Tracker::Update(float dt) {
-
     for (auto& recEv : instance_->recurringEvents) 
         recEv->Update(dt);
-
 }
 
 
@@ -158,7 +156,6 @@ bool Tracker::RemoveRecurringEvent(RecurringEventsManager* ev) {
 
     return recurringEvents.size() != size;
 }
-
 
 
 // ------------------ Factoria de eventos ---------------------
