@@ -13,8 +13,8 @@ public:
 	virtual void Flush(bool finalFlush);
 
 private:
-	void createFilePerEventType();
-	void addSufixToEveryFile();
+	void createFilePerEventType(ISerializer* s);
+	void addSufixToEveryFile(ISerializer* s);
 	
 	std::string eventsLogPath;
 	bool firstFlush;
