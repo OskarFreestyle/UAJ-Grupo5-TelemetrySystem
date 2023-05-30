@@ -13,6 +13,7 @@ public:
 	virtual void Flush(bool finalFlush);
 
 private:
+
 	void createFilePerEventType(ISerializer* s);
 	void addSufixToEveryFile(ISerializer* s);
 	

@@ -36,17 +36,12 @@ private:
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
-    // Lista de eventos periodicos
-    std::list<RecurringEvent*> recurringEvents;
-
-    float defaultRecurringInterval;
-
-    // Lista de serializadores
-    std::list<std::string> serializersToUse;
-
+    // Atriutos para eventos periodicos
+        std::list<RecurringEvent*> recurringEvents;
+        float defaultRecurringInterval;
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
-    void readConfigurationFile();
+    void readConfigurationFile(std::list<std::string>& serializersToUse);
 
     // Genera un id de sesion aplicando sha256 a una cadena obtenida a partir del tiempo actual
     void generateSessionId();

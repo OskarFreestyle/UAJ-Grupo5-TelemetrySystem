@@ -26,7 +26,7 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 			std::cout << "La creacion del directorio events_log ha fallado!";
 	}
 
-	// A�ade a la ruta el id de la sesion
+	// Añade a la ruta el id de la sesion
 	eventsLogPath.append(sessionId + "\\");
 
 	// Crea una carpeta con la sesion actual

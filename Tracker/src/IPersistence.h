@@ -18,7 +18,15 @@ public:
 		events_ = CircularQueue<TrackerEvent*>(capacity);
 	};
 	
-	virtual ~IPersistence() { };
+	virtual ~IPersistence() {
+	
+		for (auto s : serializers_) {
+			delete s.second;
+		}
+
+		serializers_.clear();
+
+	};
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
 		TrackerEvent* e = events_.push(trackerEvent);

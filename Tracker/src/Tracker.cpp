@@ -46,7 +46,9 @@ Tracker::Tracker() {
 
     generateSessionId();
 
-    readConfigurationFile();
+    std::list<std::string> serializersToUse;
+
+    readConfigurationFile(serializersToUse);
 
     perstObjects_.push_back(new FilePersistence(maxElementsInQueue, id_, serializersToUse));
 }
@@ -68,7 +70,7 @@ Tracker::~Tracker() {
     std::cout << "Tracker cerrado con exito!" << std::endl;
 }
 
-void Tracker::readConfigurationFile() {
+void Tracker::readConfigurationFile(std::list<std::string>& serializersToUse) {
 
     // Lectura de JSON
     std::ifstream file("configure.json");
