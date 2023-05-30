@@ -12,6 +12,7 @@ int main() {
 
 	Tracker::Instance()->trackEvent(Tracker::createActionUsedEvent()->setDay(2));
 	Tracker::Instance()->trackEvent(Tracker::createRaidSelectedEvent());
+	Tracker::Instance()->trackEvent(Tracker::createRaidSelectedEvent());
 
 	Tracker::End();
 

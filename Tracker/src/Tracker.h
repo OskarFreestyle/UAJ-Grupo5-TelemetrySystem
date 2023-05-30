@@ -27,24 +27,27 @@ private:
     // Numero maximo de eventos en la cola al mismo tiempo
     int maxElementsInQueue;
 
+    // Tiempo entre flushes
+    float timeBetweenFlushes;
+
+    // Timer para la logica de flush de la cola
+    float timer;
+
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
-
-    std::list<RecurringEvent*> recurringEvents;
-
-    std::list<std::string> serializersToUse;
-
-    float defaultRecurringInterval;
-
+    // Atriutos para eventos periodicos
+        std::list<RecurringEvent*> recurringEvents;
+        float defaultRecurringInterval;
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
-    void readConfigurationFile();
+    void readConfigurationFile(std::list<std::string>& serializersToUse);
 
     // Genera un id de sesion aplicando sha256 a una cadena obtenida a partir del tiempo actual
     void generateSessionId();
 
 public:
+
     /// <summary>
     /// Devuelve la instancia del singleton
     /// </summary>

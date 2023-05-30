@@ -1,6 +1,7 @@
 #pragma once
 #include "TrackerEvent.h"
 #include "ISerializer.h"
+#include "CircularQueue.h"
 #include <string>
 #include <list>
 #include <queue>
@@ -11,36 +12,47 @@ class IPersistence {
 
 public:
 
-	IPersistence(int maxEventsInQueue, std::list<std::string> serializersToUse) : MAX_EVENTS_IN_QUEUE(maxEventsInQueue) {
+	IPersistence(int capacity, std::list<std::string> serializersToUse) {
 		createSerializers(serializersToUse);
+
+		events_ = CircularQueue<TrackerEvent*>(capacity);
 	};
-	virtual ~IPersistence() { };
+	
+	virtual ~IPersistence() {
+	
+		for (auto s : serializers_) {
+			delete s.second;
+		}
+
+		serializers_.clear();
+
+	};
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
-		TrackerEvent* clone = trackerEvent->clone();
-		events.push(clone);
+		TrackerEvent* e = events_.push(trackerEvent);
 
-		if (events.size() >= MAX_EVENTS_IN_QUEUE) Flush(false);
+		if (e != nullptr)
+			TrackerEvent::DestroyEvent(e);
 	}
 
 	virtual void Flush(bool finalFlush) = 0;
 
 protected:
 
-	std::unordered_map<std::string, ISerializer*> serializers_;
-	std::queue<TrackerEvent*> events;
+	CircularQueue<TrackerEvent*> events_;
 
-	int MAX_EVENTS_IN_QUEUE = 10;
+	std::unordered_map<std::string, ISerializer*> serializers_;
 
 private:
+
 	void createSerializers(std::list<std::string> serializersToUse) {
+
 		for(std::string serializer : serializersToUse) {
-			if (serializer == "json") {			
+			if (serializer == "json")		
 				serializers_["json"] = new JsonSerializer();
-			}
-			else if (serializer == "csv") {
+			else if (serializer == "csv")
 				serializers_["csv"] = new CSVSerializer();
-			}
 		}
+
 	}
 };

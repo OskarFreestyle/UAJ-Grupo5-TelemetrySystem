@@ -42,9 +42,13 @@ void Tracker::End() {
 Tracker::Tracker() {
     std::cout << "Tracker construido con exito!" << std::endl;
 
+    timer = 0;
+
     generateSessionId();
 
-    readConfigurationFile();
+    std::list<std::string> serializersToUse;
+
+    readConfigurationFile(serializersToUse);
 
     perstObjects_.push_back(new FilePersistence(maxElementsInQueue, id_, serializersToUse));
 }
@@ -63,18 +67,19 @@ Tracker::~Tracker() {
 
     perstObjects_.clear();
       
-    std::cout << "Tracker destruido con exito!" << std::endl;
+    std::cout << "Tracker cerrado con exito!" << std::endl;
 }
 
-void Tracker::readConfigurationFile() {
+void Tracker::readConfigurationFile(std::list<std::string>& serializersToUse) {
 
-    // Lectura de JSON y creacion de mascara de bits
+    // Lectura de JSON
     std::ifstream file("configure.json");
     json j;
     file >> j;
 
     eventsBitMask_ = 0x0000;
 
+    // Creacion de mascara de bits
     for (const auto& item : j.at("data")) {
         bool active = item.at("active");
         int index = item.at("index");
@@ -84,9 +89,17 @@ void Tracker::readConfigurationFile() {
             eventsBitMask_ += std::pow(2, index);
     }
 
+    /*
+    * Lectura de propiedades:
+    * - Intervalo de tiempo en el que se trackean los eventos periodicos
+    * - Tamaño maximo de la cola cirular
+    * - Tiempo entre flushes de la cola
+    */
     defaultRecurringInterval = j.contains("defaultRecurringInterval") ? j["defaultRecurringInterval"].get<float>() : 10;
     maxElementsInQueue = j.contains("maxElementsInQueue") ? j["maxElementsInQueue"].get<int>() : 10;
+    timeBetweenFlushes = j.contains("timeBetweenFlushes") ? j["timeBetweenFlushes"].get<float>() : 10;
     
+    // Creacion de serializadores
     if (j.contains("serializers")) {
         for (const auto& serializer : j["serializers"]) {
             serializersToUse.push_back(serializer.get<std::string>());
@@ -127,11 +140,23 @@ void Tracker::trackEvent(TrackerEvent* event) {
     for (auto p : perstObjects_)
         p->sendEvent(event);
 
-    // Destruye el evento ya que los objetos de persistencia lo clonan
-    TrackerEvent::DestroyEvent(event);
 }
 
 void Tracker::Update(float dt) {
+
+    instance_->timer += dt;
+
+    if (instance_->timer >= instance_->timeBetweenFlushes) {
+
+        // Se persisten los eventos en fichero con su serializacion correspondiente
+        for (auto& pers : instance_->perstObjects_)
+            pers->Flush(false);
+
+        // Se reestablece el contador
+        instance_->timer = 0;
+    }
+
+    // Se actualizan los eventos periodicos
     for (auto& recEv : instance_->recurringEvents) 
         recEv->Update(dt);
 }
@@ -161,41 +186,41 @@ bool Tracker::RemoveRecurringEvent(RecurringEvent* ev) {
 // ------------------ Factoria de eventos ---------------------
 
 SessionStartEvent* Tracker::createSessionStartEvent() {
-    return new SessionStartEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new SessionStartEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 SessionEndEvent* Tracker::createSessionEndEvent() {
-    return new SessionEndEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new SessionEndEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 LeaveBaseEvent* Tracker::createLeaveBaseEvent() {
-    return new LeaveBaseEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new LeaveBaseEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 FoodItemCraftedEvent* Tracker::createFoodItemCraftedEvent() {
-    return new FoodItemCraftedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new FoodItemCraftedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 ShipItemCraftedEvent* Tracker::createShipItemCraftedEvent() {
-    return new ShipItemCraftedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new ShipItemCraftedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 ActionUsedEvent* Tracker::createActionUsedEvent() {
-    return new ActionUsedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new ActionUsedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 EnterRaidMenuEvent* Tracker::createEnterRaidMenuEvent() {
-    return new EnterRaidMenuEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new EnterRaidMenuEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 RaidSelectedEvent* Tracker::createRaidSelectedEvent() {
-    return new RaidSelectedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new RaidSelectedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 ItemConsumedEvent* Tracker::createItemConsumedEvent() {
-    return new ItemConsumedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new ItemConsumedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }
 
 PositionEvent* Tracker::createPositionEvent() {
-    return new PositionEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+    return new PositionEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
 }

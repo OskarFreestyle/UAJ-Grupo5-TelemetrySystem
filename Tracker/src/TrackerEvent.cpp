@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 // -------------------------- Clase padre -----------------------
 
-TrackerEvent::TrackerEvent(double timestamp, std::string id, ::EventType eventType) {
+TrackerEvent::TrackerEvent(const std::string& timestamp, const std::string& id, ::EventType eventType) {
 
 	timestamp_ = timestamp;
 	id_ = id;
@@ -21,16 +21,14 @@ const std::string TrackerEvent::toJson() {
 	json j;
 
 	j["SessionId"] = id_;
-	j["TimeSinceStart"] = timestamp_;
+	j["TimeNow"] = timestamp_;
 
 	return j.dump(2);
 }
 
 const std::string TrackerEvent::toCSV() {
 
-	std::string time = std::to_string(timestamp_);
-
-	return id_ + "," + time + "," + eventTypes[(int)eventType_];
+	return id_ + "," + timestamp_ + "," + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {
@@ -73,22 +71,14 @@ void RecurringEvent::Update(float dt) {
 
 // ------------------- SessionStartEvent -----------------------
 
-SessionStartEvent::SessionStartEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SESSION_STARTED) {}
-
-TrackerEvent* SessionStartEvent::clone() {
-	return new SessionStartEvent(timestamp_, id_);
-}
+SessionStartEvent::SessionStartEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_STARTED) {}
 
 
 
 
 // ------------------- SessionEndEvent -----------------------
 
-SessionEndEvent::SessionEndEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
-
-SessionEndEvent* SessionEndEvent::clone() {
-	return new SessionEndEvent(timestamp_, id_);
-}
+SessionEndEvent::SessionEndEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
 
 
 
@@ -96,7 +86,7 @@ SessionEndEvent* SessionEndEvent::clone() {
 
 // ------------------- ReturnBaseEvent -----------------------
 
-LeaveBaseEvent::LeaveBaseEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
+LeaveBaseEvent::LeaveBaseEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
 	fatigue = sleepOption = day = 0;
 }
 
@@ -139,20 +129,12 @@ const std::string LeaveBaseEvent::toCSV() {
 	return ss.str();
 }
 
-LeaveBaseEvent* LeaveBaseEvent::clone() {
-	LeaveBaseEvent* e = new LeaveBaseEvent(timestamp_, id_);
-
-	e->setFatigue(fatigue)->setSleepOption(sleepOption)->setDay(day);
-
-	return e;
-}
-
 
 
 
 // -------------------- FoodItemCraftedEvent --------------------------------
 
-FoodItemCraftedEvent::FoodItemCraftedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
+FoodItemCraftedEvent::FoodItemCraftedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
 	hunger = day = craft = 0;
 }
 
@@ -193,20 +175,12 @@ const std::string FoodItemCraftedEvent::toCSV() {
 	return ss.str();
 }
 
-FoodItemCraftedEvent* FoodItemCraftedEvent::clone() {
-	FoodItemCraftedEvent* e = new FoodItemCraftedEvent(timestamp_, id_);
-
-	e->setHunger(hunger)->setCraft(craft)->setDay(day);
-
-	return e;
-}
-
 
 
 
 // -------------------------- CraftShipEvent ------------------------------
 
-ShipItemCraftedEvent::ShipItemCraftedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
+ShipItemCraftedEvent::ShipItemCraftedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
 	nCrafted = nCraftables = day = 0;
 }
 
@@ -248,19 +222,10 @@ const std::string ShipItemCraftedEvent::toCSV() {
 	return ss.str();
 }
 
-ShipItemCraftedEvent* ShipItemCraftedEvent::clone() {
-	ShipItemCraftedEvent* e = new ShipItemCraftedEvent(timestamp_, id_);
-
-	e->setCrafted(nCrafted)->setCraftables(nCraftables)->setDay(day);
-
-	return e;
-
-}
-
 
 // ---------------------------- ActionUsedEvent ---------------------------------
 
-ActionUsedEvent::ActionUsedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
+ActionUsedEvent::ActionUsedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
 	nActions = day = 0;
 }
 
@@ -294,19 +259,11 @@ const std::string ActionUsedEvent::toCSV() {
 	return ss.str();
 }
 
-ActionUsedEvent* ActionUsedEvent::clone() {
-	ActionUsedEvent* e = new ActionUsedEvent(timestamp_, id_);
-
-	e->setActions(nActions)->setDay(day);
-
-	return e;
-}
-
 
 
 // ------------------------ EnterRaidMenuEvent ------------------------------
 
-EnterRaidMenuEvent::EnterRaidMenuEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
+EnterRaidMenuEvent::EnterRaidMenuEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
 	day = 0;
 }
 
@@ -333,20 +290,12 @@ const std::string EnterRaidMenuEvent::toCSV() {
 	return ss.str();
 }
 
-EnterRaidMenuEvent* EnterRaidMenuEvent::clone() {
-	EnterRaidMenuEvent* e = new EnterRaidMenuEvent(timestamp_, id_);
-
-	e->setDay(day);
-
-	return e;
-}
-
 
 
 
 // ------------------- RaidSelectedEvent -----------------------
 
-RaidSelectedEvent::RaidSelectedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
+RaidSelectedEvent::RaidSelectedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
 	day = hunger = location = 0;
 }
 
@@ -391,19 +340,11 @@ const std::string RaidSelectedEvent::toCSV() {
 	return ss.str();
 }
 
-RaidSelectedEvent* RaidSelectedEvent::clone() {
-	RaidSelectedEvent* e = new RaidSelectedEvent(timestamp_, id_);
-
-	e->setDay(day);
-
-	return e;
-}
-
 
 
 // ------------------- UsingItemEvent -----------------------
 
-ItemConsumedEvent::ItemConsumedEvent(float timestamp, std::string id) : TrackerEvent(timestamp, id, EventType::ITEM_CONSUMED) {
+ItemConsumedEvent::ItemConsumedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ITEM_CONSUMED) {
 	day = 0;
 }
 
@@ -431,18 +372,10 @@ const std::string ItemConsumedEvent::toCSV() {
 	return ss.str();
 }
 
-ItemConsumedEvent* ItemConsumedEvent::clone() {
-	ItemConsumedEvent* e = new ItemConsumedEvent(timestamp_, id_);
-
-	e->setDay(day);
-
-	return e;
-}
-
 
 // -------------------- Position Event -----------------------
 
-PositionEvent::PositionEvent(float timestamp, std::string id): TrackerEvent(timestamp, id, EventType::POSITION) {
+PositionEvent::PositionEvent(const std::string& timestamp, const std::string& id): TrackerEvent(timestamp, id, EventType::POSITION) {
 	x = y = 0;
 }
 
@@ -479,14 +412,4 @@ const std::string PositionEvent::toCSV() {
 	ss << parentCSV << "," << x << "," << y << "," << entity;
 
 	return ss.str();
-}
-
-PositionEvent* PositionEvent::clone() {
-
-	PositionEvent* e = new PositionEvent(timestamp_, id_);
-
-	e->setPosition(x, y);
-	e->setEntity(entity);
-
-	return e;
 }

@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\checkML.h" />
+    <ClInclude Include="..\src\CircularQueue.h" />
     <ClInclude Include="..\src\CSVSerializer.h" />
     <ClInclude Include="..\src\FilePersistence.h" />
     <ClInclude Include="..\src\IPersistence.h" />
@@ -116,9 +117,6 @@
     <ClCompile Include="..\src\Tracker.cpp" />
     <ClCompile Include="..\src\TrackerEvent.cpp" />
     <ClCompile Include="TrackerTest.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\data\configure.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
