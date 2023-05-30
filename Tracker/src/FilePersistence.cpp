@@ -26,17 +26,13 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 			std::cout << "La creacion del directorio events_log ha fallado!";
 	}
 
-	// Añade a la ruta el id de la sesion
+	// Anade a la ruta el id de la sesion
 	eventsLogPath.append(sessionId + "\\");
 
 	// Crea una carpeta con la sesion actual
 	int err = _mkdir(eventsLogPath.c_str());
 	if (err != 0) std::cout << "La creacion del directorio de la sesion actual ha fallado!";
 
-	//eventsLogPath.append("\\" + sessionId + ".");
-
-	firstFlush = true;
-	
 	for (auto type : eventTypes)
 		firstEventPerType[type] = true;
 }
@@ -72,33 +68,26 @@ void FilePersistence::addSufixToEveryFile(ISerializer* s)
 	int i = 0;
 	for (auto eventType : eventTypes)
 	{
-		std::string path;
-		path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
+		// Solo anade sufijo a los archivos que existen
+		if (!firstEventPerType[eventTypes[i]]) {
+			std::string path;
+			path.append(eventsLogPath + "\\" + eventTypes[i] + "." + s->Format());
 
-		std::cout << "Sufixed: " << eventTypes[i] << std::endl;
+			std::cout << "Sufixed: " << eventTypes[i] << std::endl;
 
-		// Crea el archivo
-		file.open(path, std::ios::out | std::ios::app);
+			// Crea el archivo
+			file.open(path, std::ios::out | std::ios::app);
 
-		// Se escribe la parte inicial del archivo
-		file << s->getSufix((EventType) i);
+			// Se escribe la parte inicial del archivo
+			file << s->getSufix((EventType)i);
 
-		file.close();
+			file.close();
+		}
 		i++;
 	}
 }
 
 void FilePersistence::Flush(bool finalFlush) {
-
-	// Si es el primer flush
-	if (firstFlush) {
-		for (const auto& serializerPair : serializers_) {
-			ISerializer* s = serializerPair.second;
-			// Se crea un archivo por cada tipo de evento
-			createFilePerEventType(s);
-			firstFlush = false;
-		}
-	}
 
 	// Mientras queden eventos en la cola
 	while (!events_.isEmpty()) {
@@ -109,25 +98,32 @@ void FilePersistence::Flush(bool finalFlush) {
 
 		for (const auto& serializerPair : serializers_) {
 			ISerializer* s = serializerPair.second;
+			int eventType = (int)event->getType();
 
 			std::ofstream file;
 			std::string path;
 
 			// Se abre el archivo para las persistencias de ese evento en concreto
-			path.append(eventsLogPath + "\\" + eventTypes[(int)event->getType()] + "." + s->Format());
+			path.append(eventsLogPath + "\\" + eventTypes[eventType] + "." + s->Format());
 			file.open(path, std::ios::out | std::ios::app);
 
-			// Se serializa
 			std::string stringEvent = s->Serialize(event);
-
-			if (firstEventPerType[eventTypes[(int)event->getType()]]) {
-				firstEventPerType[eventTypes[(int)event->getType()]] = false;
+			
+			// Si es la primera vez que se encuentra un evento de este tipo
+			if (firstEventPerType[eventTypes[eventType]]) {
+				// Se escribe la parte inicial del archivo
+				file << s->getPrefix((EventType)eventType);
+				// Se serializa
+				file << stringEvent;
+				// Marcamos false que sea la primera vez
+				firstEventPerType[eventTypes[eventType]] = false;
 			}
 			else {
+				// Se serializa
+				file << stringEvent;
+				// Se anade el interfijo
 				file << s->getInterfix(event->getType());
 			}
-
-			file << stringEvent;
 
 			file << '\n';
 		}
