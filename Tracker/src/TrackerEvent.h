@@ -40,9 +40,8 @@ const std::string eventTypes[] = {
 class TrackerEvent {
 
 public:
-	TrackerEvent(double timestamp, std::string id, EventType eventType);
+	TrackerEvent(const std::string& timestamp, const std::string& id, EventType eventType);
 	virtual ~TrackerEvent() {};
-	virtual TrackerEvent* clone() = 0;
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
 
@@ -54,7 +53,7 @@ public:
 
 protected:
 
-	float timestamp_;
+	std::string timestamp_;
 	std::string id_;
 	EventType eventType_;
 	uint16_t maskBits_;
@@ -68,11 +67,11 @@ protected:
 * 
 * Util para trackear posicion de entidades, vida del jugador... etc.
 */
-class RecurringEventsManager {
+class RecurringEvent {
 
 public: 
 
-	RecurringEventsManager(std::function<TrackerEvent* ()> func, float interval);
+	RecurringEvent(std::function<TrackerEvent* ()> func, float interval);
 
 	void Update(float dt);
 
@@ -90,8 +89,7 @@ private:
 class SessionStartEvent : public TrackerEvent {
 
 public:
-	SessionStartEvent(float timestamp, std::string id);
-	virtual TrackerEvent* clone();
+	SessionStartEvent(const std::string& timestamp, const std::string& id);
 
 };
 
@@ -100,8 +98,7 @@ public:
 class SessionEndEvent : public TrackerEvent {
 
 public:
-	SessionEndEvent(float timestamp, std::string id);
-	virtual SessionEndEvent* clone();
+	SessionEndEvent(const std::string& timestamp, const std::string& id);
 };
 
 
@@ -115,7 +112,7 @@ private:
 
 public:
 
-	LeaveBaseEvent(float timestamp, std::string id);
+	LeaveBaseEvent(const std::string& timestamp, const std::string& id);
 
 	LeaveBaseEvent* setFatigue(int fatigue);
 	LeaveBaseEvent* setSleepOption(int sleepOption);
@@ -123,7 +120,6 @@ public:
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual LeaveBaseEvent* clone();
 };
 
 
@@ -137,7 +133,7 @@ private:
 
 public:
 
-	FoodItemCraftedEvent(float timestamp, std::string id);
+	FoodItemCraftedEvent(const std::string& timestamp, const std::string& id);
 
 	FoodItemCraftedEvent* setHunger(int hunger);
 	FoodItemCraftedEvent* setCraft(bool craft);
@@ -145,7 +141,6 @@ public:
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual FoodItemCraftedEvent* clone();
 };
 
 
@@ -157,7 +152,7 @@ private:
 	int nCraftables;
 	int day;
 public:
-	ShipItemCraftedEvent(float timestamp, std::string id);
+	ShipItemCraftedEvent(const std::string& timestamp, const std::string& id);
 
 	ShipItemCraftedEvent* setCrafted(int crafted);
 	ShipItemCraftedEvent* setCraftables(int craftables);
@@ -165,7 +160,6 @@ public:
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual ShipItemCraftedEvent* clone();
 };
 
 
@@ -178,14 +172,13 @@ private:
 	int day;
 public:
 
-	ActionUsedEvent(float timestamp, std::string id);
+	ActionUsedEvent(const std::string& timestamp, const std::string& id);
 
 	ActionUsedEvent* setActions(int actions);
 	ActionUsedEvent* setDay(int day);
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual ActionUsedEvent* clone();
 };
 
 
@@ -198,13 +191,12 @@ private:
 
 public:
 
-	EnterRaidMenuEvent(float timestamp, std::string id);
+	EnterRaidMenuEvent(const std::string& timestamp, const std::string& id);
 
 	EnterRaidMenuEvent* setDay(int day);
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual EnterRaidMenuEvent* clone();
 };
 
 
@@ -219,7 +211,7 @@ private:
 	int day;
 
 public:
-	RaidSelectedEvent(float timestamp, std::string id);
+	RaidSelectedEvent(const std::string& timestamp, const std::string& id);
 
 	RaidSelectedEvent* setItems(const std::list<int>& l);
 	RaidSelectedEvent* setLocation(int location);
@@ -228,7 +220,6 @@ public:
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual RaidSelectedEvent* clone();
 };
 
 
@@ -240,13 +231,12 @@ private:
 	int day;
 
 public:
-	ItemConsumedEvent(float timestamp, std::string id);
+	ItemConsumedEvent(const std::string& timestamp, const std::string& id);
 
 	ItemConsumedEvent* setDay(int day);
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual ItemConsumedEvent* clone();
 };
 
 
@@ -261,12 +251,11 @@ private:
 	std::string entity;
 
 public:
-	PositionEvent(float timestamp, std::string id);
+	PositionEvent(const std::string& timestamp, const std::string& id);
 
 	PositionEvent* setPosition(float x, float y);
 	PositionEvent* setEntity(std::string name);
 
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
-	virtual PositionEvent* clone();
 };

@@ -1,29 +1,31 @@
 #pragma once
 #include "TrackerEvent.h"
 #include "ISerializer.h"
-#include <string>
-#include <list>
-#include <queue>
+#include "CircularQueue.h"
 
 class IPersistence {
 
 public:
 
-	IPersistence(int maxEventsInQueue): MAX_EVENTS_IN_QUEUE(maxEventsInQueue) {};
-	virtual ~IPersistence() { };
+	IPersistence(int capacity) {
+	
+		events_ = CircularQueue<TrackerEvent*>(capacity);
+	
+	};
+
+	virtual ~IPersistence() {};
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
-		TrackerEvent* clone = trackerEvent->clone();
-		events.push(clone);
+		TrackerEvent* e = events_.push(trackerEvent);
 
-		if (events.size() >= MAX_EVENTS_IN_QUEUE) Flush(false);
+		if (e != nullptr)
+			TrackerEvent::DestroyEvent(e);
 	}
 
 	virtual void Flush(bool finalFlush) = 0;
 
 protected:
 
-	std::queue<TrackerEvent*> events;
+	CircularQueue<TrackerEvent*> events_;
 
-	int MAX_EVENTS_IN_QUEUE = 10;
 };

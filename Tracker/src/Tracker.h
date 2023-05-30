@@ -27,13 +27,19 @@ private:
     // Numero maximo de eventos en la cola al mismo tiempo
     int maxElementsInQueue;
 
+    // Tiempo entre flushes
+    float timeBetweenFlushes;
+
+    // Timer para la logica de flush de la cola
+    float timer;
+
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
 
             std::unordered_map<std::string, ISerializer*> serializers_;
 
-            std::list<RecurringEventsManager*> recurringEvents;
+            std::list<RecurringEvent*> recurringEvents;
 
             std::string currentSerializer;
 
@@ -93,8 +99,8 @@ public:
     static PositionEvent* createPositionEvent();
 
     // Tracking de eventos periodicos
-    RecurringEventsManager* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
-    bool RemoveRecurringEvent(RecurringEventsManager* event);
+    RecurringEvent* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
+    bool RemoveRecurringEvent(RecurringEvent* event);
 
 };
 

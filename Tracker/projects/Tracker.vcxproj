@@ -19,13 +19,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -97,6 +97,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\checkML.h" />
+    <ClInclude Include="..\src\CircularQueue.h" />
     <ClInclude Include="..\src\CSVSerializer.h" />
     <ClInclude Include="..\src\FilePersistence.h" />
     <ClInclude Include="..\src\IPersistence.h" />
@@ -116,9 +117,6 @@
     <ClCompile Include="..\src\Tracker.cpp" />
     <ClCompile Include="..\src\TrackerEvent.cpp" />
     <ClCompile Include="TrackerTest.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\data\configure.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <ctime>
+#include <string>
 
 class Timer {
 
@@ -16,5 +17,6 @@ public:
 	static void End();
 
 	time_t getTimeNow();
+	std::string getTimeNowStringFormat();
 };
 

@@ -45,16 +45,16 @@ void FilePersistence::Flush(bool finalFlush) {
 		firstFlush = false;
 	}
 
-	while (!events.empty()) {
+	while (!events_.isEmpty()) {
 
-		TrackerEvent* event = events.front();
-		events.pop();
+		TrackerEvent* event = events_.frontElement();
+		events_.pop();
 
 		std::string stringEvent = s->Serialize(event);
 
 		file << stringEvent;
 
-		if (!(finalFlush && events.size() == 0))
+		if (!(finalFlush && events_.currentSize() == 0))
 			file << s->interfix;
 
 		file << '\n';

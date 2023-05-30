@@ -1,6 +1,7 @@
 {
-  "serializer": "json", 
-  "maxElementsInQueue": 10, 
+  "serializer": "json",
+  "maxElementsInQueue": 10,
+  "timeBetweenFlushes": 5,
   "defaultRecurringInterval": 3,
 
   "data": [
@@ -57,7 +58,7 @@
       "active": true,
       "index": 8
     },
-    
+
     {
       "name": "POSITION",
       "active": true,
