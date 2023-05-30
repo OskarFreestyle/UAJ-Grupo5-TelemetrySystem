@@ -22,7 +22,6 @@ const std::string TrackerEvent::toJson() {
 
 	j["SessionId"] = id_;
 	j["TimeSinceStart"] = timestamp_;
-	j["EventType"] = eventTypes[(int) eventType_];
 
 	return j.dump(2);
 }
