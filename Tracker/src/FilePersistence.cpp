@@ -48,7 +48,6 @@ FilePersistence::~FilePersistence() {}
 void FilePersistence::createFilePerEventType(ISerializer* s)
 {
 	std::ofstream file;
-
 	int i = 0;
 	for (auto eventType : eventTypes)
 	{
@@ -61,7 +60,7 @@ void FilePersistence::createFilePerEventType(ISerializer* s)
 		file.open(path, std::ios::out | std::ios::app);
 
 		// Se escribe la parte inicial del archivo
-		file << s->prefix;
+		file << s->getPrefix((EventType) i);
 
 		file.close();
 		i++;
@@ -84,7 +83,7 @@ void FilePersistence::addSufixToEveryFile(ISerializer* s)
 		file.open(path, std::ios::out | std::ios::app);
 
 		// Se escribe la parte inicial del archivo
-		file << s->sufix;
+		file << s->getSufix((EventType) i);
 
 		file.close();
 		i++;
@@ -93,24 +92,28 @@ void FilePersistence::addSufixToEveryFile(ISerializer* s)
 
 void FilePersistence::Flush(bool finalFlush) {
 
-	for (const auto& serializerPair : serializers_) {
-		ISerializer* s = serializerPair.second;
-
-		// Si es el primer flush
-		if (firstFlush) {
+	// Si es el primer flush
+	if (firstFlush) {
+		for (const auto& serializerPair : serializers_) {
+			ISerializer* s = serializerPair.second;
 			// Se crea un archivo por cada tipo de evento
 			createFilePerEventType(s);
 			firstFlush = false;
 		}
+	}
 
-		// Mientras queden eventos en la cola
-		while (!events.empty()) {
+	// Mientras queden eventos en la cola
+	while (!events.empty()) {
+
+		// Se coje el primer evento
+		TrackerEvent* event = events.front();
+		events.pop();
+
+		for (const auto& serializerPair : serializers_) {
+			ISerializer* s = serializerPair.second;
+
 			std::ofstream file;
 			std::string path;
-
-			// Se coje el primer evento
-			TrackerEvent* event = events.front();
-			events.pop();
 
 			// Se abre el archivo para las persistencias de ese evento en concreto
 			path.append(eventsLogPath + "\\" + eventTypes[(int)event->getType()] + "." + s->Format());
@@ -123,17 +126,20 @@ void FilePersistence::Flush(bool finalFlush) {
 				firstEventPerType[eventTypes[(int)event->getType()]] = false;
 			}
 			else {
-				file << s->interfix;
+				file << s->getInterfix(event->getType());
 			}
 
 			file << stringEvent;
 
 			file << '\n';
-
-			TrackerEvent::DestroyEvent(event);
 		}
 
-		if (finalFlush) {
+		TrackerEvent::DestroyEvent(event);
+	}
+
+	if (finalFlush) {
+		for (const auto& serializerPair : serializers_) {
+			ISerializer* s = serializerPair.second;
 			addSufixToEveryFile(s);
 		}
 	}

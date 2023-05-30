@@ -23,5 +23,9 @@ public:
 	/// </summary>
 	inline std::string Format() { return "json"; };
 
+	virtual	std::string getPrefix(EventType eventType);
+	virtual	std::string getInterfix(EventType eventType);
+	virtual	std::string getSufix(EventType eventType);
+
 };
 

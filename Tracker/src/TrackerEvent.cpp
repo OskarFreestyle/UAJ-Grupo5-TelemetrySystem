@@ -31,7 +31,7 @@ const std::string TrackerEvent::toCSV() {
 
 	std::string time = std::to_string(timestamp_);
 
-	return "id:" + id_ + ",time:" + time + ",eventType:" + eventTypes[(int)eventType_];
+	return id_ + "," + time + "," + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {
@@ -135,7 +135,7 @@ const std::string LeaveBaseEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Fatigue:" << fatigue << ",Sleep Option:" << sleepOption << ",Day:" << day;
+	ss << parentCSV << "," << fatigue << "," << sleepOption << "," << day;
 
 	return ss.str();
 }
@@ -189,7 +189,7 @@ const std::string FoodItemCraftedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Hunger:" << hunger << ",Can Craft Food Items:" << craft << ",Day:" << day;
+	ss << parentCSV << "," << hunger << "," << craft << "," << day;
 
 	return ss.str();
 }
@@ -244,7 +244,7 @@ const std::string ShipItemCraftedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Ship Items Crafted:" << nCrafted << ",Craftable Ship Items:" << nCraftables << ",Day:" << day;
+	ss << parentCSV << "," << nCrafted << "," << nCraftables << "," << day;
 
 	return ss.str();
 }
@@ -290,7 +290,7 @@ const std::string ActionUsedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Actions Used:" << nActions << ",Day:" << day;
+	ss << parentCSV << "," << nActions << "," << day;
 
 	return ss.str();
 }
@@ -329,7 +329,7 @@ const std::string EnterRaidMenuEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -387,7 +387,7 @@ const std::string RaidSelectedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -427,7 +427,7 @@ const std::string ItemConsumedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -477,7 +477,7 @@ const std::string PositionEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",x:" << x << ",y:" << y << ",entity:" << entity;
+	ss << parentCSV << "," << x << "," << y << "," << entity;
 
 	return ss.str();
 }

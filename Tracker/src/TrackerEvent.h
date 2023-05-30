@@ -20,6 +20,20 @@ enum class EventType {
 	POSITION,	        // Posicion del jugador u otro npc
 };	
 
+//Primera fila del CSV para cada eventType
+
+const std::string CSVPrefixes[] = {
+	"Id,Time,EventType\n",														//0
+	"Id,Time,EventType\n",														//1
+	"Id,Time,EventType,Fatigue,\"Sleepo ption\",Day\n",							//2
+	"Id,Time,EventType,Hunger,\"Can craft food items\",Day\n",					//3
+	"Id,Time,EventType,\"Ship items crafted\",\"Craftable ship items\",Day\n",	//4
+	"Id,Time,EventType,\"Actions used\",Day\n",									//5
+	"Id,Time,EventType,Day\n",													//6
+	"Id,Time,EventType,Day\n",													//7
+	"Id,Time,EventType,Day\n",													//8
+	"Id,Time,EventType,X,Y,Entity\n"											//9,
+};
 
 // Enum -> String (Comodidad)
 const std::string eventTypes[] = {
