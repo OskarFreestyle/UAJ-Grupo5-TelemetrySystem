@@ -70,13 +70,14 @@ Tracker::~Tracker() {
 
 void Tracker::readConfigurationFile() {
 
-    // Lectura de JSON y creacion de mascara de bits
+    // Lectura de JSON
     std::ifstream file("configure.json");
     json j;
     file >> j;
 
     eventsBitMask_ = 0x0000;
 
+    // Creacion de mascara de bits
     for (const auto& item : j.at("data")) {
         bool active = item.at("active");
         int index = item.at("index");
@@ -86,10 +87,17 @@ void Tracker::readConfigurationFile() {
             eventsBitMask_ += std::pow(2, index);
     }
 
+    /*
+    * Lectura de propiedades:
+    * - Intervalo de tiempo en el que se trackean los eventos periodicos
+    * - Tamaño maximo de la cola cirular
+    * - Tiempo entre flushes de la cola
+    */
     defaultRecurringInterval = j.contains("defaultRecurringInterval") ? j["defaultRecurringInterval"].get<float>() : 10;
     maxElementsInQueue = j.contains("maxElementsInQueue") ? j["maxElementsInQueue"].get<int>() : 10;
     timeBetweenFlushes = j.contains("timeBetweenFlushes") ? j["timeBetweenFlushes"].get<float>() : 10;
     
+    // Creacion de serializadores
     if (j.contains("serializers")) {
         for (const auto& serializer : j["serializers"]) {
             serializersToUse.push_back(serializer.get<std::string>());

@@ -36,12 +36,13 @@ private:
     // Lista de objetos de persistencia (cada uno se encarga de un tipo de persistencia)
     std::list<IPersistence*> perstObjects_;
 
-
+    // Lista de eventos periodicos
     std::list<RecurringEvent*> recurringEvents;
 
-    std::list<std::string> serializersToUse;
-
     float defaultRecurringInterval;
+
+    // Lista de serializadores
+    std::list<std::string> serializersToUse;
 
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
@@ -51,6 +52,7 @@ private:
     void generateSessionId();
 
 public:
+
     /// <summary>
     /// Devuelve la instancia del singleton
     /// </summary>

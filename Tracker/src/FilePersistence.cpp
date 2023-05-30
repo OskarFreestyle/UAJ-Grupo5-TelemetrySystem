@@ -38,9 +38,7 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	firstFlush = true;
 	
 	for (auto type : eventTypes)
-	{
 		firstEventPerType[type] = true;
-	}
 }
 
 FilePersistence::~FilePersistence() {}
@@ -103,11 +101,11 @@ void FilePersistence::Flush(bool finalFlush) {
 	}
 
 	// Mientras queden eventos en la cola
-	while (!events.empty()) {
+	while (!events_.isEmpty()) {
 
 		// Se coje el primer evento
-		TrackerEvent* event = events.front();
-		events.pop();
+		TrackerEvent* event = events_.frontElement();
+		events_.pop();
 
 		for (const auto& serializerPair : serializers_) {
 			ISerializer* s = serializerPair.second;

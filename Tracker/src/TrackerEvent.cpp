@@ -28,9 +28,7 @@ const std::string TrackerEvent::toJson() {
 
 const std::string TrackerEvent::toCSV() {
 
-	std::string time = std::to_string(timestamp_);
-
-	return id_ + "," + time + "," + eventTypes[(int)eventType_];
+	return id_ + "," + timestamp_ + "," + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {

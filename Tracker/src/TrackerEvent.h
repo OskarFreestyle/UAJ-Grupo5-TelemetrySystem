@@ -21,7 +21,6 @@ enum class EventType {
 };	
 
 //Primera fila del CSV para cada eventType
-
 const std::string CSVPrefixes[] = {
 	"Id,Time\n",														//0
 	"Id,Time\n",														//1
