@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <list>
+#include <unordered_map>
+#include <queue>
 
 class TrackerEvent;
 enum class EventType;
@@ -25,4 +28,9 @@ protected:
 	std::string prefix = "";
 	std::string interfix = "";
 	std::string sufix = "";
+
+	bool ignoreFirstInterfix = true;
+
+	// Queremos ignorar el primer interifijo por cada tipo de evento, ya que arriba solo estará el prefijo
+	std::unordered_map<std::string, bool> firstEventPerType;
 };

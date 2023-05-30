@@ -1,6 +1,17 @@
 #include "CSVSerializer.h"
 #include "TrackerEvent.h"
 
+
+CSVSerializer::CSVSerializer()
+{
+	interfix = "\n";
+
+	for (auto type : eventTypes)
+	{
+		firstEventPerType[type] = true;
+	}
+}
+
 std::string CSVSerializer::Serialize(TrackerEvent* event) {
 	return event->toCSV();
 }
@@ -12,7 +23,13 @@ std::string CSVSerializer::getPrefix(EventType eventType)
 
 std::string CSVSerializer::getInterfix(EventType eventType)
 {
-	return interfix;
+	if (firstEventPerType[eventTypes[(int)eventType]]) {
+		firstEventPerType[eventTypes[(int)eventType]] = false;
+		return "";
+	}
+	else {
+		return interfix;
+	}
 }
 
 std::string CSVSerializer::getSufix(EventType eventType)

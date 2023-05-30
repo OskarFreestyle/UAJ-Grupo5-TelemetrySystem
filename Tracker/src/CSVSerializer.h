@@ -2,11 +2,13 @@
 
 #include "ISerializer.h"
 
+class TrackerEvent;
+
 class CSVSerializer : public ISerializer {
 
 public:
 
-	CSVSerializer() {};
+	CSVSerializer();
 	~CSVSerializer() {};
 
 	/// <summary>

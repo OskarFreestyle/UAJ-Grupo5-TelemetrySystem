@@ -18,7 +18,5 @@ private:
 	
 	std::string eventsLogPath;
 	bool firstFlush;
-
-	std::unordered_map<std::string, bool> firstEventPerType;
 };
 

@@ -36,11 +36,6 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	//eventsLogPath.append("\\" + sessionId + ".");
 
 	firstFlush = true;
-	
-	for (auto type : eventTypes)
-	{
-		firstEventPerType[type] = true;
-	}
 }
 
 FilePersistence::~FilePersistence() {}
@@ -119,19 +114,11 @@ void FilePersistence::Flush(bool finalFlush) {
 			path.append(eventsLogPath + "\\" + eventTypes[(int)event->getType()] + "." + s->Format());
 			file.open(path, std::ios::out | std::ios::app);
 
+			file << s->getInterfix(event->getType());
+
 			// Se serializa
 			std::string stringEvent = s->Serialize(event);
-
-			if (firstEventPerType[eventTypes[(int)event->getType()]]) {
-				firstEventPerType[eventTypes[(int)event->getType()]] = false;
-			}
-			else {
-				file << s->getInterfix(event->getType());
-			}
-
 			file << stringEvent;
-
-			file << '\n';
 		}
 
 		TrackerEvent::DestroyEvent(event);
