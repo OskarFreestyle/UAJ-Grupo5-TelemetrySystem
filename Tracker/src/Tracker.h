@@ -37,13 +37,11 @@ private:
     std::list<IPersistence*> perstObjects_;
 
 
-            std::unordered_map<std::string, ISerializer*> serializers_;
+    std::list<RecurringEvent*> recurringEvents;
 
-            std::list<RecurringEvent*> recurringEvents;
+    std::list<std::string> serializersToUse;
 
-            std::string currentSerializer;
-
-            float defaultRecurringInterval;
+    float defaultRecurringInterval;
 
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
@@ -53,35 +51,31 @@ private:
     void generateSessionId();
 
 public:
-
-    // Evitamos copiar objetos de la clase Tracker
-    Tracker(Tracker& other) = delete;
-
-    // Evitamos asignar objetos de la clase Tracker
-    void operator=(const Tracker&) = delete;
-
-    
-            static ISerializer* GetSerializer();
-
-
-    /// <summary>
-    /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
-    /// </summary>
-    static void Update(float dt);
-
-    /// <summary>
-    /// Libera los recursos del tracker, persistiendo antes todos los eventos de la cola
-    /// </summary>
-    static void End();
-
     /// <summary>
     /// Devuelve la instancia del singleton
     /// </summary>
     static Tracker* Instance();
 
     /// <summary>
+    /// Libera los recursos del tracker, persistiendo antes todos los eventos de la cola
+    /// </summary>
+    static void End();
+
+    // Evitamos copiar objetos de la clase Tracker
+    Tracker(Tracker& other) = delete;
+
+    // Evitamos asignar objetos de la clase Tracker
+    void operator=(const Tracker&) = delete;
+    
+    /// <summary>
+    /// Este metodo deberia ser llamado en cada iteracion del bucle de juego. Se utiliza para actualizar los temporizadores
+    /// </summary>
+    static void Update(float dt);
+
+
+    /// <summary>
     /// Si el eventos es trackeable, lo envia a los objetos de persistencia
-    /// Después es eliminado ya que los objetos de persistencia lo clona
+    /// Despuï¿½s es eliminado ya que los objetos de persistencia lo clona
     /// </summary>
     void trackEvent(TrackerEvent* event);
 
@@ -101,6 +95,5 @@ public:
     // Tracking de eventos periodicos
     RecurringEvent* AddRecurringEvent(std::function<TrackerEvent* ()> funct, float interval = -1);
     bool RemoveRecurringEvent(RecurringEvent* event);
-
 };
 

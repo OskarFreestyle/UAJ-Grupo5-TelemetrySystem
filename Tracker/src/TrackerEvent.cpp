@@ -6,7 +6,6 @@
 
 using json = nlohmann::json;
 
-
 // -------------------------- Clase padre -----------------------
 
 TrackerEvent::TrackerEvent(const std::string& timestamp, const std::string& id, ::EventType eventType) {
@@ -23,14 +22,15 @@ const std::string TrackerEvent::toJson() {
 
 	j["SessionId"] = id_;
 	j["TimeSinceStart"] = timestamp_;
-	j["EventType"] = eventTypes[(int) eventType_];
 
 	return j.dump(2);
 }
 
 const std::string TrackerEvent::toCSV() {
 
-	return "id:" + id_ + ",time:" + timestamp_ + ",eventType:" + eventTypes[(int)eventType_];
+	std::string time = std::to_string(timestamp_);
+
+	return id_ + "," + time + "," + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {
@@ -112,14 +112,13 @@ LeaveBaseEvent* LeaveBaseEvent::setDay(int day) {
 
 const std::string LeaveBaseEvent::toJson() {
 
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Fatigue"] = fatigue;
 	j["Sleep Option"] = sleepOption;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 
 }
 
@@ -127,7 +126,7 @@ const std::string LeaveBaseEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Fatigue:" << fatigue << ",Sleep Option:" << sleepOption << ",Day:" << day;
+	ss << parentCSV << "," << fatigue << "," << sleepOption << "," << day;
 
 	return ss.str();
 }
@@ -160,21 +159,20 @@ FoodItemCraftedEvent* FoodItemCraftedEvent::setDay(int day) {
 }
 
 const std::string FoodItemCraftedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Hunger"] = hunger;
 	j["Can Craft Food Items"] = craft;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string FoodItemCraftedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Hunger:" << hunger << ",Can Craft Food Items:" << craft << ",Day:" << day;
+	ss << parentCSV << "," << hunger << "," << craft << "," << day;
 
 	return ss.str();
 }
@@ -208,21 +206,20 @@ ShipItemCraftedEvent* ShipItemCraftedEvent::setDay(int day) {
 
 
 const std::string ShipItemCraftedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Ship Items Crafted"] = nCrafted;
 	j["Craftable Ship Items"] = nCraftables;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ShipItemCraftedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Ship Items Crafted:" << nCrafted << ",Craftable Ship Items:" << nCraftables << ",Day:" << day;
+	ss << parentCSV << "," << nCrafted << "," << nCraftables << "," << day;
 
 	return ss.str();
 }
@@ -247,20 +244,19 @@ ActionUsedEvent* ActionUsedEvent::setDay(int day) {
 }
 
 const std::string ActionUsedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Actions Used"] = nActions;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ActionUsedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Actions Used:" << nActions << ",Day:" << day;
+	ss << parentCSV << "," << nActions << "," << day;
 
 	return ss.str();
 }
@@ -280,19 +276,18 @@ EnterRaidMenuEvent* EnterRaidMenuEvent::setDay(int day) {
 }
 
 const std::string EnterRaidMenuEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string EnterRaidMenuEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -331,19 +326,18 @@ RaidSelectedEvent* RaidSelectedEvent::setDay(int day) {
 }
 
 const std::string RaidSelectedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string RaidSelectedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -364,19 +358,18 @@ ItemConsumedEvent* ItemConsumedEvent::setDay(int day) {
 
 
 const std::string ItemConsumedEvent::toJson() {
-	std::string parentJson = TrackerEvent::toJson();
+	json j = nlohmann::json::parse(TrackerEvent::toJson());
 
-	json j;
 	j["Day"] = day;
 
-	return parentJson + j.dump(2);
+	return j.dump(2);
 }
 
 const std::string ItemConsumedEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",Day:" << day;
+	ss << parentCSV << "," << day;
 
 	return ss.str();
 }
@@ -418,7 +411,7 @@ const std::string PositionEvent::toCSV() {
 	std::string parentCSV = TrackerEvent::toCSV();
 
 	std::stringstream ss;
-	ss << parentCSV << ",x:" << x << ",y:" << y << ",entity:" << entity;
+	ss << parentCSV << "," << x << "," << y << "," << entity;
 
 	return ss.str();
 }

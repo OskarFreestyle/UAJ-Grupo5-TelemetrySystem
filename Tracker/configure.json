@@ -1,7 +1,6 @@
 {
-  "serializer": "json",
-  "maxElementsInQueue": 10,
-  "timeBetweenFlushes": 5,
+  "serializers": ["json", "csv"], 
+  "maxElementsInQueue": 10, 
   "defaultRecurringInterval": 3,
 
   "data": [

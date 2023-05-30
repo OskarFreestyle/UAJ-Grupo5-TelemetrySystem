@@ -2,18 +2,23 @@
 #include "TrackerEvent.h"
 #include "ISerializer.h"
 #include "CircularQueue.h"
+#include <string>
+#include <list>
+#include <queue>
+#include "JsonSerializer.h"
+#include "CSVSerializer.h"
 
 class IPersistence {
 
 public:
 
-	IPersistence(int capacity) {
-	
-		events_ = CircularQueue<TrackerEvent*>(capacity);
-	
-	};
+	IPersistence(int capacity, std::list<std::string> serializersToUse) {
+		createSerializers(serializersToUse);
 
-	virtual ~IPersistence() {};
+		events_ = CircularQueue<TrackerEvent*>(capacity);
+	};
+	
+	virtual ~IPersistence() { };
 
 	inline void sendEvent(TrackerEvent* trackerEvent) {
 		TrackerEvent* e = events_.push(trackerEvent);
@@ -28,4 +33,18 @@ protected:
 
 	CircularQueue<TrackerEvent*> events_;
 
+	std::unordered_map<std::string, ISerializer*> serializers_;
+
+private:
+
+	void createSerializers(std::list<std::string> serializersToUse) {
+
+		for(std::string serializer : serializersToUse) {
+			if (serializer == "json")		
+				serializers_["json"] = new JsonSerializer();
+			else if (serializer == "csv")
+				serializers_["csv"] = new CSVSerializer();
+		}
+
+	}
 };
