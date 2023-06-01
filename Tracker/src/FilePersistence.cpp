@@ -1,5 +1,5 @@
 #include "FilePersistence.h"
-#include "TrackerEvent.h"
+#include "Events/TrackerEvent.h"
 #include "Tracker.h"
 
 #include <fstream>
@@ -70,7 +70,7 @@ void FilePersistence::addSufixToEveryFile(ISerializer* s)
 	for (auto eventType : eventTypes)
 	{
 		// Solo anade sufijo a los archivos que existen
-		if (!firstEventPerType[eventTypes[i]]) {
+		//if (!firstEventPerType[eventTypes[i]]) {
 			std::string path;
 			path.append(eventsLogPath + "\\" + eventTypes[i] + "." + s->Format());
 
@@ -83,7 +83,7 @@ void FilePersistence::addSufixToEveryFile(ISerializer* s)
 			file << s->getSufix((EventType)i);
 
 			file.close();
-		}
+		//}
 		i++;
 	}
 }

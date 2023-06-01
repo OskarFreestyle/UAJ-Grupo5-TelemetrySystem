@@ -46,14 +46,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)lib\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>$(ProjectName)</TargetName>
-    <OutDir>$(SolutionDir)lib\$(Configuration)\$(Platform)</OutDir>
-    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\$(Platform)</IntDir>
+    <OutDir>$(SolutionDir)lib\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)temp\$(ProjectName)\$(Configuration)\$(Platform)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -99,6 +99,18 @@
     <ClInclude Include="..\src\checkML.h" />
     <ClInclude Include="..\src\CircularQueue.h" />
     <ClInclude Include="..\src\CSVSerializer.h" />
+    <ClInclude Include="..\src\Events\ActionUsedEvent.h" />
+    <ClInclude Include="..\src\Events\EnterRaidMenuEvent.h" />
+    <ClInclude Include="..\src\Events\FoodItemCraftedEvent.h" />
+    <ClInclude Include="..\src\Events\ItemConsumedEvent.h" />
+    <ClInclude Include="..\src\Events\LeaveBaseEvent.h" />
+    <ClInclude Include="..\src\Events\PositionEvent.h" />
+    <ClInclude Include="..\src\Events\RaidSelectedEvent.h" />
+    <ClInclude Include="..\src\Events\RecurringEvent.h" />
+    <ClInclude Include="..\src\Events\SessionEndEvent.h" />
+    <ClInclude Include="..\src\Events\SessionStartEvent.h" />
+    <ClInclude Include="..\src\Events\ShipItemCraftedEvent.h" />
+    <ClInclude Include="..\src\Events\TrackerEvent.h" />
     <ClInclude Include="..\src\FilePersistence.h" />
     <ClInclude Include="..\src\IPersistence.h" />
     <ClInclude Include="..\src\ISerializer.h" />
@@ -106,16 +118,26 @@
     <ClInclude Include="..\src\sha256.h" />
     <ClInclude Include="..\src\Timer.h" />
     <ClInclude Include="..\src\Tracker.h" />
-    <ClInclude Include="..\src\TrackerEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CSVSerializer.cpp" />
+    <ClCompile Include="..\src\Events\ActionUsedEvent.cpp" />
+    <ClCompile Include="..\src\Events\EnterRaidMenuEvent.cpp" />
+    <ClCompile Include="..\src\Events\FoodItemCraftedEvent.cpp" />
+    <ClCompile Include="..\src\Events\ItemConsumedEvent.cpp" />
+    <ClCompile Include="..\src\Events\LeaveBaseEvent.cpp" />
+    <ClCompile Include="..\src\Events\PositionEvent.cpp" />
+    <ClCompile Include="..\src\Events\RaidSelectedEvent.cpp" />
+    <ClCompile Include="..\src\Events\RecurringEvent.cpp" />
+    <ClCompile Include="..\src\Events\SessionEndEvent.cpp" />
+    <ClCompile Include="..\src\Events\SessionStartEvent.cpp" />
+    <ClCompile Include="..\src\Events\ShipItemCraftedEvent.cpp" />
+    <ClCompile Include="..\src\Events\TrackerEvent.cpp" />
     <ClCompile Include="..\src\FilePersistence.cpp" />
     <ClCompile Include="..\src\JsonSerializer.cpp" />
     <ClCompile Include="..\src\sha256.cpp" />
     <ClCompile Include="..\src\Timer.cpp" />
     <ClCompile Include="..\src\Tracker.cpp" />
-    <ClCompile Include="..\src\TrackerEvent.cpp" />
     <ClCompile Include="TrackerTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,7 +3,20 @@
 #include <string>
 #include <list>
 #include <unordered_map>
-#include "TrackerEvent.h"
+
+// Events
+#include "Events/TrackerEvent.h"
+#include "Events/ActionUsedEvent.h"
+#include "Events/EnterRaidMenuEvent.h"
+#include "Events/FoodItemCraftedEvent.h"
+#include "Events/ItemConsumedEvent.h"
+#include "Events/LeaveBaseEvent.h"
+#include "Events/PositionEvent.h"
+#include "Events/RaidSelectedEvent.h"
+#include "Events/RecurringEvent.h"
+#include "Events/SessionEndEvent.h"
+#include "Events/SessionStartEvent.h"
+#include "Events/ShipItemCraftedEvent.h"
 
 class IPersistence;
 class ISerializer;
@@ -37,8 +50,8 @@ private:
     std::list<IPersistence*> perstObjects_;
 
     // Atriutos para eventos periodicos
-        std::list<RecurringEvent*> recurringEvents;
-        float defaultRecurringInterval;
+    std::list<RecurringEvent*> recurringEvents;
+    float defaultRecurringInterval;
 
     // Genera la mascara de bits a partir de la lectura del JSON e inicializa el resto de informacion
     void readConfigurationFile(std::list<std::string>& serializersToUse);

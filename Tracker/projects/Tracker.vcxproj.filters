@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de encabezado\Events">
+      <UniqueIdentifier>{9325b2ec-e24b-4fc9-933a-a1fd749a42e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\Events">
+      <UniqueIdentifier>{c2b6de06-6678-4429-a964-a03c8fc4fdeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\checkML.h">
@@ -36,9 +42,6 @@
     <ClInclude Include="..\src\Tracker.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TrackerEvent.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\JsonSerializer.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -47,6 +50,42 @@
     </ClInclude>
     <ClInclude Include="..\src\CircularQueue.h">
       <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\TrackerEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\RecurringEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\ActionUsedEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\EnterRaidMenuEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\FoodItemCraftedEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\ItemConsumedEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\LeaveBaseEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\PositionEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\RaidSelectedEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\SessionEndEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\SessionStartEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Events\ShipItemCraftedEvent.h">
+      <Filter>Archivos de encabezado\Events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,9 +101,6 @@
     <ClCompile Include="..\src\Tracker.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\TrackerEvent.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\JsonSerializer.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -73,6 +109,42 @@
     </ClCompile>
     <ClCompile Include="TrackerTest.cpp">
       <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\TrackerEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\RecurringEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\ActionUsedEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\EnterRaidMenuEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\FoodItemCraftedEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\ItemConsumedEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\LeaveBaseEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\PositionEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\RaidSelectedEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\SessionEndEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\SessionStartEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Events\ShipItemCraftedEvent.cpp">
+      <Filter>Archivos de origen\Events</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
