@@ -13,7 +13,7 @@
 
 FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sessionId, std::list<std::string> serializersToUse) : IPersistence(maxElementsInQueue, serializersToUse) {
 
-	eventsLogPath = "\events_log\\";
+	eventsLogPath = "events_log\\";
 
 	// Intenta acceder a la carpeta events_log
 	int result = _access(eventsLogPath.c_str(), 0);
@@ -33,95 +33,84 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	int err = _mkdir(eventsLogPath.c_str());
 	if (err != 0) std::cout << "La creacion del directorio de la sesion actual ha fallado!";
 
-	//eventsLogPath.append("\\" + sessionId + ".");
-
 	firstFlush = true;
+	sessionID = sessionId;
 }
 
 FilePersistence::~FilePersistence() {}
 
-void FilePersistence::createFilePerEventType(ISerializer* s)
-{
-	std::ofstream file;
-	int i = 0;
-	for (auto eventType : eventTypes)
-	{
-		std::string path;
-		path.append(eventsLogPath + "\\" + /*std::to_string(i) + "_" +*/ eventTypes[i] + "." + s->Format());
-
-		std::cout << "Create: " << eventTypes[i] << std::endl;
-
-		// Crea el archivo
-		file.open(path, std::ios::out | std::ios::app);
-
-		// Se escribe la parte inicial del archivo
-		file << s->getPrefix((EventType) i);
-
-		file.close();
-		i++;
-	}
-}
-
-void FilePersistence::addSufixToEveryFile(ISerializer* s)
-{
-	std::ofstream file;
-
-	int i = 0;
-	for (auto eventType : eventTypes)
-	{
-		// Solo anade sufijo a los archivos que existen
-		//if (!firstEventPerType[eventTypes[i]]) {
-			std::string path;
-			path.append(eventsLogPath + "\\" + eventTypes[i] + "." + s->Format());
-
-			std::cout << "Sufixed: " << eventTypes[i] << std::endl;
-
-			// Crea el archivo
-			file.open(path, std::ios::out | std::ios::app);
-
-			// Se escribe la parte inicial del archivo
-			file << s->getSufix((EventType)i);
-
-			file.close();
-		//}
-		i++;
-	}
-}
-
 void FilePersistence::Flush(bool finalFlush) {
+
+	bool filesOpened = false;
+
+	// Punteros del ofstream de cada archivo
+	std::vector<std::ofstream*> files;
 
 	// Mientras queden eventos en la cola
 	while (!events_.isEmpty()) {
+
+		// Se abre el archivo a persistir (para todos los formatos)
+		if (!filesOpened) {
+
+			for (const auto& serializerPair : serializers_) {
+				ISerializer* s = serializerPair.second;
+
+				// Se abre el archivo para las persistencias de ese evento en concreto
+				std::string path;
+				path.append(eventsLogPath + "\\" + sessionID + "." + s->Format());
+				std::ofstream* file = new ofstream();
+				file->open(path, std::ios::out | std::ios::app);
+
+				// Se anade el prefijo
+				if (firstFlush) {
+					(*file) << s->getPrefix(EventType::SESSION_STARTED);
+				}
+
+				// Se añade al mapa de files
+				files.push_back(file);
+			}
+
+			// Desmarcamos el primerFlush
+			if (firstFlush) firstFlush = false;
+
+			filesOpened = true;
+		}
 
 		// Se coje el primer evento
 		TrackerEvent* event = events_.frontElement();
 		events_.pop();
 
+		// Se serializa en cada archivo
+		int aux = 0;
 		for (const auto& serializerPair : serializers_) {
 			ISerializer* s = serializerPair.second;
-			int eventType = (int)event->getType();
 
-			std::ofstream file;
-			std::string path;
-
-			// Se abre el archivo para las persistencias de ese evento en concreto
-			path.append(eventsLogPath + "\\" + eventTypes[eventType] + "." + s->Format());
-			file.open(path, std::ios::out | std::ios::app);
-
-			file << s->getInterfix(event->getType());
+			(*files[aux]) << s->getInterfix(event->getType());
 
 			// Se serializa
 			std::string stringEvent = s->Serialize(event);
-			file << stringEvent;
+			(*files[aux]) << stringEvent;
+			aux++;
 		}
 
 		TrackerEvent::DestroyEvent(event);
-	}
 
-	if (finalFlush) {
-		for (const auto& serializerPair : serializers_) {
-			ISerializer* s = serializerPair.second;
-			addSufixToEveryFile(s);
+		// Si se ha vaciado la cola, cerramos los archivos
+		if (events_.isEmpty()) {
+			int aux = 0;
+			for (const auto& serializerPair : serializers_) {
+				ISerializer* s = serializerPair.second;
+
+				// Si es el final flush se anade el sufijo
+				if (finalFlush) {
+					(*files[aux]) << s->getSufix(EventType::SESSION_ENDED);
+				}
+
+				files[aux]->close();
+				delete files[aux];
+
+				aux++;
+			}
 		}
 	}
 }

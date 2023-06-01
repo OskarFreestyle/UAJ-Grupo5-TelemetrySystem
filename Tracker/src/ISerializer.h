@@ -29,7 +29,7 @@ protected:
 	std::string interfix = "";
 	std::string sufix = "";
 
-	bool ignoreFirstInterfix = true;
+	bool ignoreFirstInterfix = false; // TODO quitar?
 
 	// Queremos ignorar el primer interifijo por cada tipo de evento, ya que arriba solo estará el prefijo
 	std::unordered_map<std::string, bool> firstEventPerType;
