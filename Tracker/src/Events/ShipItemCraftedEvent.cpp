@@ -1,5 +1,6 @@
 #include "ShipItemCraftedEvent.h"
 #include "../Tracker.h"
+#include <sstream>
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;

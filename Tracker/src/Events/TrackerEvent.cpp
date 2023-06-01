@@ -1,8 +1,8 @@
 #include "TrackerEvent.h"
-#include "../checkML.h"
-#include "../Tracker.h"
-#include <sstream>
 #include "nlohmann/json.hpp"
+#include "..\checkML.h"
+#include "..\Tracker.h"
+#include <sstream>
 
 using json = nlohmann::json;
 
@@ -18,6 +18,8 @@ TrackerEvent::TrackerEvent(const std::string& timestamp, const std::string& id, 
 }
 
 const std::string TrackerEvent::toJson() {
+	//json j = json{ {"SessionId", id_}, {"TimeNow", timestamp_} };
+	
 	json j;
 
 	j["SessionId"] = id_;
