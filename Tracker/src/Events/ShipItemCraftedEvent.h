@@ -9,7 +9,7 @@ private:
 	int nCraftables;
 	int day;
 public:
-	ShipItemCraftedEvent(const std::string& timestamp, const std::string& id);
+	ShipItemCraftedEvent(double timestamp, const std::string& id);
 
 	ShipItemCraftedEvent* setCrafted(int crafted);
 	ShipItemCraftedEvent* setCraftables(int craftables);

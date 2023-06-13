@@ -186,41 +186,41 @@ bool Tracker::RemoveRecurringEvent(RecurringEvent* ev) {
 // ------------------ Factoria de eventos ---------------------
 
 SessionStartEvent* Tracker::createSessionStartEvent() {
-    return new SessionStartEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new SessionStartEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 SessionEndEvent* Tracker::createSessionEndEvent() {
-    return new SessionEndEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new SessionEndEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 LeaveBaseEvent* Tracker::createLeaveBaseEvent() {
-    return new LeaveBaseEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new LeaveBaseEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 FoodItemCraftedEvent* Tracker::createFoodItemCraftedEvent() {
-    return new FoodItemCraftedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new FoodItemCraftedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 ShipItemCraftedEvent* Tracker::createShipItemCraftedEvent() {
-    return new ShipItemCraftedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new ShipItemCraftedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 ActionUsedEvent* Tracker::createActionUsedEvent() {
-    return new ActionUsedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new ActionUsedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 EnterRaidMenuEvent* Tracker::createEnterRaidMenuEvent() {
-    return new EnterRaidMenuEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new EnterRaidMenuEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 RaidSelectedEvent* Tracker::createRaidSelectedEvent() {
-    return new RaidSelectedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new RaidSelectedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 ItemConsumedEvent* Tracker::createItemConsumedEvent() {
-    return new ItemConsumedEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new ItemConsumedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
 PositionEvent* Tracker::createPositionEvent() {
-    return new PositionEvent(Timer::Instance()->getTimeNowStringFormat(), instance_->id_);
+    return new PositionEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }

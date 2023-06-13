@@ -6,6 +6,6 @@
 class SessionStartEvent : public TrackerEvent {
 
 public:
-	SessionStartEvent(const std::string& timestamp, const std::string& id);
+	SessionStartEvent(double timestamp, const std::string& id);
 
 };

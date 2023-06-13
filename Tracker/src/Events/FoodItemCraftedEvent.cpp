@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 // -------------------- FoodItemCraftedEvent --------------------------------
 
-FoodItemCraftedEvent::FoodItemCraftedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
+FoodItemCraftedEvent::FoodItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
 	hunger = day = craft = 0;
 }
 

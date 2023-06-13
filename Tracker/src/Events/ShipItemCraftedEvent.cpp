@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 // -------------------------- CraftShipEvent ------------------------------
 
-ShipItemCraftedEvent::ShipItemCraftedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
+ShipItemCraftedEvent::ShipItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
 	nCrafted = nCraftables = day = 0;
 }
 

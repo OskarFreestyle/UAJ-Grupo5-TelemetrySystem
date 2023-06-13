@@ -12,7 +12,7 @@ private:
 	int day;
 
 public:
-	RaidSelectedEvent(const std::string& timestamp, const std::string& id);
+	RaidSelectedEvent(double timestamp, const std::string& id);
 
 	RaidSelectedEvent* setItems(const std::list<int>& l);
 	RaidSelectedEvent* setLocation(int location);

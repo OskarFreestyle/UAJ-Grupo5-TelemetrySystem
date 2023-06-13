@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 // -------------------- Position Event -----------------------
 
-PositionEvent::PositionEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::POSITION) {
+PositionEvent::PositionEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::POSITION) {
 	x = y = 0;
 }
 

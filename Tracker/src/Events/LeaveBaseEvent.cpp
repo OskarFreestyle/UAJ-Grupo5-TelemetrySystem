@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 // ------------------- ReturnBaseEvent -----------------------
 
-LeaveBaseEvent::LeaveBaseEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
+LeaveBaseEvent::LeaveBaseEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
 	fatigue = sleepOption = day = 0;
 }
 

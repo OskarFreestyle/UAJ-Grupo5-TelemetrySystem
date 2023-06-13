@@ -17,6 +17,5 @@ public:
 	static void End();
 
 	time_t getTimeNow();
-	std::string getTimeNowStringFormat();
 };
 

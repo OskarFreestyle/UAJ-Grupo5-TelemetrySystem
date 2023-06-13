@@ -52,7 +52,7 @@ const std::string eventTypes[] = {
 class TrackerEvent {
 
 public:
-	TrackerEvent(const std::string& timestamp, const std::string& id, EventType eventType);
+	TrackerEvent(double timestamp, const std::string& id, EventType eventType);
 	virtual ~TrackerEvent() {};
 	virtual const std::string toJson();
 	virtual const std::string toCSV();
@@ -65,7 +65,7 @@ public:
 
 protected:
 
-	std::string timestamp_;
+	double timestamp_;
 	std::string id_;
 	EventType eventType_;
 	uint16_t maskBits_;

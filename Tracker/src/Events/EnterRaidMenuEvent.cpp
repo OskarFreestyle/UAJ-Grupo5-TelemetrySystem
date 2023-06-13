@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 // ------------------------ EnterRaidMenuEvent ------------------------------
 
-EnterRaidMenuEvent::EnterRaidMenuEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
+EnterRaidMenuEvent::EnterRaidMenuEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
 	day = 0;
 }
 

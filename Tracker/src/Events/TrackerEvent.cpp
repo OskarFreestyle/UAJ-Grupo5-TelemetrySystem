@@ -8,7 +8,7 @@ using json = nlohmann::json;
 
 // -------------------------- Clase padre -----------------------
 
-TrackerEvent::TrackerEvent(const std::string& timestamp, const std::string& id, ::EventType eventType) {
+TrackerEvent::TrackerEvent(double timestamp, const std::string& id, ::EventType eventType) {
 
 	timestamp_ = timestamp;
 	id_ = id;
@@ -23,14 +23,14 @@ const std::string TrackerEvent::toJson() {
 	json j;
 
 	j["SessionId"] = id_;
-	j["TimeNow"] = timestamp_;
+	j["TimeStamp"] = timestamp_;
 
 	return j.dump(2);
 }
 
 const std::string TrackerEvent::toCSV() {
 
-	return id_ + "," + timestamp_ + "," + eventTypes[(int)eventType_];
+	return id_ + "," + std::to_string(timestamp_) + "," + eventTypes[(int)eventType_];
 }
 
 const EventType TrackerEvent::getType() {

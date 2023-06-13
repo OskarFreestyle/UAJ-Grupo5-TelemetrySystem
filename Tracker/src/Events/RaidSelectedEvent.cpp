@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 // ------------------- RaidSelectedEvent -----------------------
 
-RaidSelectedEvent::RaidSelectedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
+RaidSelectedEvent::RaidSelectedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
 	day = hunger = location = 0;
 }
 

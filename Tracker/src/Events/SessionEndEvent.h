@@ -6,5 +6,5 @@
 class SessionEndEvent : public TrackerEvent {
 
 public:
-	SessionEndEvent(const std::string& timestamp, const std::string& id);
+	SessionEndEvent(double timestamp, const std::string& id);
 };

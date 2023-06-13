@@ -9,7 +9,7 @@ private:
 	int day;
 
 public:
-	ItemConsumedEvent(const std::string& timestamp, const std::string& id);
+	ItemConsumedEvent(double timestamp, const std::string& id);
 
 	ItemConsumedEvent* setDay(int day);
 

@@ -7,7 +7,7 @@ using json = nlohmann::json;
 
 // ---------------------------- ActionUsedEvent ---------------------------------
 
-ActionUsedEvent::ActionUsedEvent(const std::string& timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
+ActionUsedEvent::ActionUsedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
 	nActions = day = 0;
 }
 
