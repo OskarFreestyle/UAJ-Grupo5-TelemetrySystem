@@ -3,8 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 // ------------------- ReturnBaseEvent -----------------------
 
 LeaveBaseEvent::LeaveBaseEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
@@ -31,7 +29,7 @@ LeaveBaseEvent* LeaveBaseEvent::setDay(int day) {
 
 const std::string LeaveBaseEvent::toJson() {
 
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Fatigue"] = fatigue;
 	j["Sleep Option"] = sleepOption;

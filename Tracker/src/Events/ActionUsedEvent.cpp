@@ -3,8 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 // ---------------------------- ActionUsedEvent ---------------------------------
 
 ActionUsedEvent::ActionUsedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
@@ -24,7 +22,7 @@ ActionUsedEvent* ActionUsedEvent::setDay(int day) {
 }
 
 const std::string ActionUsedEvent::toJson() {
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Actions Used"] = nActions;
 	j["Day"] = day;

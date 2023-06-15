@@ -3,8 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 // ------------------------ EnterRaidMenuEvent ------------------------------
 
 EnterRaidMenuEvent::EnterRaidMenuEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
@@ -18,7 +16,7 @@ EnterRaidMenuEvent* EnterRaidMenuEvent::setDay(int day) {
 }
 
 const std::string EnterRaidMenuEvent::toJson() {
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Day"] = day;
 

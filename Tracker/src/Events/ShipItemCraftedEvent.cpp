@@ -3,9 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
-
 // -------------------------- CraftShipEvent ------------------------------
 
 ShipItemCraftedEvent::ShipItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
@@ -32,7 +29,7 @@ ShipItemCraftedEvent* ShipItemCraftedEvent::setDay(int day) {
 
 
 const std::string ShipItemCraftedEvent::toJson() {
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Ship Items Crafted"] = nCrafted;
 	j["Craftable Ship Items"] = nCraftables;

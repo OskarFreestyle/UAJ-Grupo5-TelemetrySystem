@@ -3,8 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 // ------------------- RaidSelectedEvent -----------------------
 
 RaidSelectedEvent::RaidSelectedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
@@ -36,7 +34,7 @@ RaidSelectedEvent* RaidSelectedEvent::setDay(int day) {
 }
 
 const std::string RaidSelectedEvent::toJson() {
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Day"] = day;
 

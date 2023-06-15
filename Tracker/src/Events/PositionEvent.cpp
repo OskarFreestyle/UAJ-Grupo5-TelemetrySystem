@@ -3,9 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
-
 // -------------------- Position Event -----------------------
 
 PositionEvent::PositionEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::POSITION) {
@@ -28,11 +25,11 @@ PositionEvent* PositionEvent::setEntity(std::string name) {
 
 const std::string PositionEvent::toJson() {
 
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
+	j["Entity"] = entity;
 	j["x"] = x;
 	j["y"] = x;
-	j["entity"] = entity;
 
 	return j.dump(2);
 }

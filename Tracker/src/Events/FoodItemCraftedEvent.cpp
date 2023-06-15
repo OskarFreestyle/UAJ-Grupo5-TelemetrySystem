@@ -3,8 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
-
 // -------------------- FoodItemCraftedEvent --------------------------------
 
 FoodItemCraftedEvent::FoodItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
@@ -30,7 +28,7 @@ FoodItemCraftedEvent* FoodItemCraftedEvent::setDay(int day) {
 }
 
 const std::string FoodItemCraftedEvent::toJson() {
-	json j = nlohmann::json::parse(TrackerEvent::toJson());
+	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Hunger"] = hunger;
 	j["Can Craft Food Items"] = craft;

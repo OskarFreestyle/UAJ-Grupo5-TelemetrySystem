@@ -4,7 +4,8 @@
 #include "..\Tracker.h"
 #include <sstream>
 
-using json = nlohmann::json;
+// ordered_json utiliza FIFO para escribir los elementos agregados mientras json los escribe alfabeticamente
+using ordered_json = nlohmann::ordered_json;
 
 // -------------------------- Clase padre -----------------------
 
@@ -18,10 +19,10 @@ TrackerEvent::TrackerEvent(double timestamp, const std::string& id, ::EventType 
 }
 
 const std::string TrackerEvent::toJson() {
-	//json j = json{ {"SessionId", id_}, {"TimeNow", timestamp_} };
-	
-	json j;
+	ordered_json j;
 
+	j["EventType"] = eventTypes[(int)eventType_];
+	//j["EventType"] = eventType_;
 	j["SessionId"] = id_;
 	j["TimeStamp"] = timestamp_;
 
@@ -42,5 +43,6 @@ bool TrackerEvent::isTrackable(uint16_t eventsMaskBits) {
 }
 
 void TrackerEvent::DestroyEvent(TrackerEvent* event) {
-	delete event; event = nullptr;
+	delete event; 
+	event = nullptr;
 }
