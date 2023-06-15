@@ -60,13 +60,16 @@ void FilePersistence::Flush() {
 		for (const auto& serializerPair : serializers_) {
 			ISerializer* s = serializerPair.second;
 
-			(*files[aux]) << s->getInterfix(event->getType());
+			if(!firstFlush) (*files[aux]) << s->getInterfix();
 
 			// Se serializa
 			std::string stringEvent = s->Serialize(event);
 			(*files[aux]) << stringEvent;
 			aux++;
 		}
+
+		// Marcamos el firstFlush como hecho
+		if (firstFlush) firstFlush = false;
 
 		// Se borra el evento ya serializado
 		TrackerEvent::DestroyEvent(event);
@@ -88,7 +91,7 @@ void FilePersistence::openPersistenceFiles()
 			file->open(path, std::ios::out | std::ios::app);
 
 			// Se anade el prefijo
-			(*file) << s->getPrefix(EventType::SESSION_STARTED);
+			(*file) << s->getPrefix();
 
 			// Se añade al mapa de files
 			files.push_back(file);
@@ -109,7 +112,7 @@ void FilePersistence::closePersistenceFiles()
 			ISerializer* s = serializerPair.second;
 
 			// Se anade el sufijo
-			(*files[aux]) << s->getSufix(EventType::SESSION_ENDED);
+			(*files[aux]) << s->getSufix();
 
 			// Cierra el ofstream
 			files[aux]->close();

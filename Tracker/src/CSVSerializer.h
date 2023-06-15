@@ -21,9 +21,9 @@ public:
 	/// </summary>
 	inline std::string Format() { return "csv"; };
 
-	virtual	std::string getPrefix(EventType eventType);
-	virtual	std::string getInterfix(EventType eventType);
-	virtual	std::string getSufix(EventType eventType);
+	virtual	std::string getPrefix();
+	virtual	std::string getInterfix();
+	virtual	std::string getSufix();
 
 };
 

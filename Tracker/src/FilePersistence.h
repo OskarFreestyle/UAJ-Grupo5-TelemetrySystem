@@ -32,5 +32,8 @@ private:
 
 	// ID de la sesion
 	std::string sessionID;
+
+	// El primer evento que se serializa no tiene la "," que lo separa del anterior
+	bool firstFlush = true;
 };
 

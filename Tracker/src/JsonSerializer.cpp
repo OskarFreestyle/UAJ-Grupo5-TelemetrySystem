@@ -5,11 +5,6 @@ JsonSerializer::JsonSerializer() {
 	prefix = "{\n\t\"events\": [\n";
 	interfix = ",\n";
 	sufix = "\n\t]\n}";
-
-	for (auto type : eventTypes)
-	{
-		firstEventPerType[type] = true;
-	}
 }
 
 std::string JsonSerializer::Serialize(TrackerEvent* event) {
@@ -32,23 +27,17 @@ std::string JsonSerializer::Serialize(TrackerEvent* event) {
 	return stringEvent;
 }
 
-std::string JsonSerializer::getPrefix(EventType eventType)
+std::string JsonSerializer::getPrefix()
 {
 	return prefix;
 }
 
-std::string JsonSerializer::getInterfix(EventType eventType)
+std::string JsonSerializer::getInterfix()
 {
-	if (firstEventPerType[eventTypes[(int) eventType]]) {
-		firstEventPerType[eventTypes[(int)eventType]] = false;
-		return "";
-	}
-	else {
-		return interfix;
-	}
+	return interfix;
 }
 
-std::string JsonSerializer::getSufix(EventType eventType)
+std::string JsonSerializer::getSufix()
 {
 	return sufix;
 }
