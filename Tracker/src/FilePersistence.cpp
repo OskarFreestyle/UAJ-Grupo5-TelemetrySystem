@@ -33,48 +33,23 @@ FilePersistence::FilePersistence(int maxElementsInQueue, const std::string& sess
 	int err = _mkdir(eventsLogPath.c_str());
 	if (err != 0) std::cout << "La creacion del directorio de la sesion actual ha fallado!";
 
-	firstFlush = true;
 	sessionID = sessionId;
+
+	// Abre los archivos en los que persistir
+	openPersistenceFiles();
 }
 
-FilePersistence::~FilePersistence() {}
+FilePersistence::~FilePersistence() {
+	// Se cierran los archivos abiertos
+	closePersistenceFiles();
 
-void FilePersistence::Flush(bool finalFlush) {
+	std::cout << "Persistencias cerradas\n";
+}
 
-	bool filesOpened = false;
-
-	// Punteros del ofstream de cada archivo
-	std::vector<std::ofstream*> files;
+void FilePersistence::Flush() {
 
 	// Mientras queden eventos en la cola
 	while (!events_.isEmpty()) {
-
-		// Se abre el archivo a persistir (para todos los formatos)
-		if (!filesOpened) {
-
-			for (const auto& serializerPair : serializers_) {
-				ISerializer* s = serializerPair.second;
-
-				// Se abre el archivo para las persistencias de ese evento en concreto
-				std::string path;
-				path.append(eventsLogPath + "\\" + sessionID + "." + s->Format());
-				std::ofstream* file = new ofstream();
-				file->open(path, std::ios::out | std::ios::app);
-
-				// Se anade el prefijo
-				if (firstFlush) {
-					(*file) << s->getPrefix(EventType::SESSION_STARTED);
-				}
-
-				// Se añade al mapa de files
-				files.push_back(file);
-			}
-
-			// Desmarcamos el primerFlush
-			if (firstFlush) firstFlush = false;
-
-			filesOpened = true;
-		}
 
 		// Se coje el primer evento
 		TrackerEvent* event = events_.frontElement();
@@ -93,24 +68,60 @@ void FilePersistence::Flush(bool finalFlush) {
 			aux++;
 		}
 
+		// Se borra el evento ya serializado
 		TrackerEvent::DestroyEvent(event);
 
-		// Si se ha vaciado la cola, cerramos los archivos
-		if (events_.isEmpty()) {
-			int aux = 0;
-			for (const auto& serializerPair : serializers_) {
-				ISerializer* s = serializerPair.second;
+	}
+}
 
-				// Si es el final flush se anade el sufijo
-				if (finalFlush) {
-					(*files[aux]) << s->getSufix(EventType::SESSION_ENDED);
-				}
+void FilePersistence::openPersistenceFiles()
+{
+	try {
+		// Se abre el archivo a persistir (para todos los formatos)
+		for (const auto& serializerPair : serializers_) {
+			ISerializer* s = serializerPair.second;
 
-				files[aux]->close();
-				delete files[aux];
+			// Se abre el archivo para las persistencias de ese evento en concreto
+			std::string path;
+			path.append(eventsLogPath + "\\" + sessionID + "." + s->Format());
+			std::ofstream* file = new ofstream();
+			file->open(path, std::ios::out | std::ios::app);
 
-				aux++;
-			}
+			// Se anade el prefijo
+			(*file) << s->getPrefix(EventType::SESSION_STARTED);
+
+			// Se añade al mapa de files
+			files.push_back(file);
 		}
+	}
+	catch (exception& e) {
+		std::cout << "Error opening persistence files\n";
+		std::cout << "Error " << e.what() << "\n";
+	}
+}
+
+void FilePersistence::closePersistenceFiles()
+{
+	// Cerramos los archivos
+	try {
+		int aux = 0;
+		for (const auto& serializerPair : serializers_) {
+			ISerializer* s = serializerPair.second;
+
+			// Se anade el sufijo
+			(*files[aux]) << s->getSufix(EventType::SESSION_ENDED);
+
+			// Cierra el ofstream
+			files[aux]->close();
+
+			// Se elimina el puntero
+			delete files[aux];
+
+			aux++;
+		}
+	}
+	catch (exception& e) {
+		std::cout << "Error closing persistence files\n";
+		std::cout << "Error " << e.what() << "\n";
 	}
 }

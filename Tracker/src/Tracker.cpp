@@ -29,7 +29,7 @@ void Tracker::End() {
 
     // Se acaban de persistir los objetos que queden
     for (auto& pers : instance_->perstObjects_) {
-        pers->Flush(true);
+        pers->Flush();
     }
 
     // Se borra la instancia del singleton
@@ -150,7 +150,7 @@ void Tracker::Update(float dt) {
 
         // Se persisten los eventos en fichero con su serializacion correspondiente
         for (auto& pers : instance_->perstObjects_)
-            pers->Flush(false);
+            pers->Flush();
 
         // Se reestablece el contador
         instance_->timer = 0;

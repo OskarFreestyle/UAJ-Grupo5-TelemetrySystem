@@ -35,7 +35,7 @@ public:
 			TrackerEvent::DestroyEvent(e);
 	}
 
-	virtual void Flush(bool finalFlush) = 0;
+	virtual void Flush() = 0;
 
 protected:
 

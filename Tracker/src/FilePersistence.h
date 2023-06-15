@@ -10,12 +10,27 @@ public:
 
 	~FilePersistence();
 
-	virtual void Flush(bool finalFlush);
+	virtual void Flush();
 
 private:
+
+	/// <summary>
+	/// Abre los archivos que se hayan añadido al vector de _serializers
+	/// </summary>
+	void openPersistenceFiles();
+
+	/// <summary>
+	/// Cierra los archivos que se hayan añadido al vector de _serializers
+	/// </summary>
+	void closePersistenceFiles();
+
+	// Punteros del ofstream de cada archivo abierto
+	std::vector<std::ofstream*> files;
 	
+	// Ruta de los archivos abiertos
 	std::string eventsLogPath;
+
+	// ID de la sesion
 	std::string sessionID;
-	bool firstFlush;
 };
 
