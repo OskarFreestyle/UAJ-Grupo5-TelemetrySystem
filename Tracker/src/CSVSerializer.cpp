@@ -5,10 +5,42 @@
 CSVSerializer::CSVSerializer()
 {
 	interfix = "\n";
+	
+	separator = "\t";
+
+	prefix = "";
+
+	for (int i = 0; i < (int) CSVFields::COUNT; i++) {
+		if (i < (int)CSVFields::COUNT - 1) {
+			prefix += CSVPrefixes[i] + separator;
+		}
+		else {
+			prefix += CSVPrefixes[i];
+		}
+
+		eventCSV[(CSVFields) i] = "";
+	}
+
+	prefix += interfix;
+
 }
 
 std::string CSVSerializer::Serialize(TrackerEvent* event) {
-	return event->toCSV();
+	clearEventCSV();
+	event->toCSV(eventCSV);
+
+	std::string csvString = "";
+
+	for (int i = 0; i < (int)CSVFields::COUNT; i++) {
+		if (i < (int)CSVFields::COUNT - 1) {
+			csvString += eventCSV[(CSVFields)i] + separator;
+		}
+		else {
+			csvString += eventCSV[(CSVFields)i];
+		}
+	}
+
+	return csvString;
 }
 
 std::string CSVSerializer::getPrefix()
@@ -24,4 +56,11 @@ std::string CSVSerializer::getInterfix()
 std::string CSVSerializer::getSufix()
 {
 	return sufix;
+}
+
+void CSVSerializer::clearEventCSV()
+{
+	for (int i = 0; i < (int)CSVFields::COUNT; i++) {
+		eventCSV[(CSVFields)i] = "";
+	}
 }

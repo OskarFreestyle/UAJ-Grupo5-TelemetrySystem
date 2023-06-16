@@ -1,8 +1,45 @@
 #pragma once
 
 #include "ISerializer.h"
+#include <unordered_map>
 
 class TrackerEvent;
+
+const std::string CSVPrefixes[] = {
+		"Id",
+		"Time",
+		"Event type",
+		"Fatigue",
+		"Sleep option",
+		"Hunger",
+		"Can craft food items",
+		"Ship items crafted",
+		"Craftable ship items",
+		"Actions used",
+		"X",
+		"Y",
+		"Entity",
+		"Day"
+};
+
+enum class CSVFields {
+	Id,
+	Time,
+	EventType,
+	Fatigue,
+	SleepOption,
+	Hunger,
+	CanCraftFoodItems,
+	ShipItemsCrafted,
+	CraftableShipItems,
+	ActionsUsed,
+	X,
+	Y,
+	Entity,
+	Day,
+	COUNT
+};
+
 
 class CSVSerializer : public ISerializer {
 
@@ -25,5 +62,10 @@ public:
 	virtual	std::string getInterfix();
 	virtual	std::string getSufix();
 
+	void clearEventCSV();
+
+	std::string separator;
+
+	std::unordered_map<CSVFields, std::string> eventCSV;
 };
 

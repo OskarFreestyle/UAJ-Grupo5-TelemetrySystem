@@ -2,6 +2,7 @@
 #include "../Tracker.h"
 #include <sstream>
 #include "nlohmann/json.hpp"
+#include "../CSVSerializer.h"
 
 // -------------------- Position Event -----------------------
 
@@ -34,12 +35,11 @@ const std::string PositionEvent::toJson() {
 	return j.dump(2);
 }
 
-const std::string PositionEvent::toCSV() {
+const void PositionEvent::toCSV(std::unordered_map<CSVFields, std::string>& eventCSV) {
+	TrackerEvent::toCSV(eventCSV);
 
-	std::string parentCSV = TrackerEvent::toCSV();
-
-	std::stringstream ss;
-	ss << parentCSV << "," << x << "," << y << "," << entity;
-
-	return ss.str();
+	eventCSV[CSVFields::X] = std::to_string((int)x);
+	eventCSV[CSVFields::Y] = std::to_string((int)y);
+	eventCSV[CSVFields::Entity] = entity;
 }
+

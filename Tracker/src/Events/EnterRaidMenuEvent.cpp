@@ -2,6 +2,7 @@
 #include "../Tracker.h"
 #include <sstream>
 #include "nlohmann/json.hpp"
+#include "../CSVSerializer.h"
 
 // ------------------------ EnterRaidMenuEvent ------------------------------
 
@@ -23,11 +24,8 @@ const std::string EnterRaidMenuEvent::toJson() {
 	return j.dump(2);
 }
 
-const std::string EnterRaidMenuEvent::toCSV() {
-	std::string parentCSV = TrackerEvent::toCSV();
+const void EnterRaidMenuEvent::toCSV(std::unordered_map<CSVFields, std::string>& eventCSV) {
+	TrackerEvent::toCSV(eventCSV);
 
-	std::stringstream ss;
-	ss << parentCSV << "," << day;
-
-	return ss.str();
+	eventCSV[CSVFields::Day] = std::to_string(day);
 }

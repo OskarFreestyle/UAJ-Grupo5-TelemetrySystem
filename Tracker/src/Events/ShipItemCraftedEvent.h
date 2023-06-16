@@ -16,5 +16,5 @@ public:
 	ShipItemCraftedEvent* setDay(int day);
 
 	virtual const std::string toJson();
-	virtual const std::string toCSV();
+	virtual const void toCSV(std::unordered_map<CSVFields, std::string>& eventCSV);
 };

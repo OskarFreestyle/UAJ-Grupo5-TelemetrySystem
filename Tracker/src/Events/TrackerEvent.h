@@ -4,7 +4,6 @@
 #include <list>
 #include <functional>
 
-
 // Tipos de Eventos que recoge el tracker
 enum class EventType { 
 	SESSION_STARTED,	// Comienzo de la sesion
@@ -18,20 +17,6 @@ enum class EventType {
 	ITEM_CONSUMED,		// Consumo de un item
 	POSITION,	        // Posicion del jugador u otro npc
 };	
-
-//Primera fila del CSV para cada eventType
-const std::string CSVPrefixes[] = {
-	"Id,Time\n",														//0
-	"Id,Time\n",														//1
-	"Id,Time,Fatigue,\"Sleepo ption\",Day\n",							//2
-	"Id,Time,Hunger,\"Can craft food items\",Day\n",					//3
-	"Id,Time,\"Ship items crafted\",\"Craftable ship items\",Day\n",	//4
-	"Id,Time,\"Actions used\",Day\n",									//5
-	"Id,Time,Day\n",													//6
-	"Id,Time,Day\n",													//7
-	"Id,Time,Day\n",													//8
-	"Id,Time,X,Y,Entity\n"												//9,
-};
 
 // Enum -> String (Comodidad)
 const std::string eventTypes[] = {
@@ -47,6 +32,7 @@ const std::string eventTypes[] = {
 	"POSITION"			//9,
 };
 
+enum class CSVFields;
 
 // Clase padre para representar un evento con la informacion base
 class TrackerEvent {
@@ -55,7 +41,7 @@ public:
 	TrackerEvent(double timestamp, const std::string& id, EventType eventType);
 	virtual ~TrackerEvent() {};
 	virtual const std::string toJson();
-	virtual const std::string toCSV();
+	virtual const void toCSV(std::unordered_map<CSVFields, std::string>& eventCSV);
 
 	const EventType getType();
 

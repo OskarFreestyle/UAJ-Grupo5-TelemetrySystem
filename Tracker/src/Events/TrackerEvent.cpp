@@ -3,6 +3,7 @@
 #include "..\checkML.h"
 #include "..\Tracker.h"
 #include <sstream>
+#include "..\CSVSerializer.h"
 
 // ordered_json utiliza FIFO para escribir los elementos agregados mientras json los escribe alfabeticamente
 using ordered_json = nlohmann::ordered_json;
@@ -29,9 +30,12 @@ const std::string TrackerEvent::toJson() {
 	return j.dump(2);
 }
 
-const std::string TrackerEvent::toCSV() {
+const void TrackerEvent::toCSV(std::unordered_map<CSVFields, std::string>& eventCSV) {
 
-	return id_ + "," + std::to_string(timestamp_) + "," + eventTypes[(int)eventType_];
+	eventCSV[CSVFields::Id] = id_;
+	eventCSV[CSVFields::Time] = std::to_string(timestamp_);
+	eventCSV[CSVFields::EventType] = eventTypes[(int)eventType_];
+
 }
 
 const EventType TrackerEvent::getType() {

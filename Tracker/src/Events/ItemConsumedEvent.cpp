@@ -2,7 +2,7 @@
 #include "../Tracker.h"
 #include <sstream>
 #include "nlohmann/json.hpp"
-
+#include "../CSVSerializer.h"
 
 // ------------------- UsingItemEvent -----------------------
 
@@ -25,11 +25,9 @@ const std::string ItemConsumedEvent::toJson() {
 	return j.dump(2);
 }
 
-const std::string ItemConsumedEvent::toCSV() {
-	std::string parentCSV = TrackerEvent::toCSV();
 
-	std::stringstream ss;
-	ss << parentCSV << "," << day;
+const void ItemConsumedEvent::toCSV(std::unordered_map<CSVFields, std::string>& eventCSV) {
+	TrackerEvent::toCSV(eventCSV);
 
-	return ss.str();
+	eventCSV[CSVFields::Day] = std::to_string(day);
 }
