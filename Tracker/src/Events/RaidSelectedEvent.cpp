@@ -3,7 +3,6 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 #include "../CSVSerializer.h"
-#include <iostream>
 
 // ------------------- RaidSelectedEvent -----------------------
 
@@ -53,10 +52,7 @@ const void RaidSelectedEvent::toCSV(std::unordered_map<CSVFields, std::string>& 
 	eventCSV[CSVFields::Location] = std::to_string(location);
 	eventCSV[CSVFields::Hunger] = std::to_string(hunger);
 	std::string itemsList;
-	for (int i : items) {
-		itemsList += std::to_string(i) + " ";
-	}
-	std::cout << itemsList << "\n";
+	for (int i : items) itemsList += std::to_string(i) + " ";
 	eventCSV[CSVFields::Items] = itemsList;
 }
 
