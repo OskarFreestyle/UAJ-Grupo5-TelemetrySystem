@@ -106,6 +106,7 @@
     <ClInclude Include="..\src\Events\LeaveBaseEvent.h" />
     <ClInclude Include="..\src\Events\PositionEvent.h" />
     <ClInclude Include="..\src\Events\RaidSelectedEvent.h" />
+    <ClInclude Include="..\src\Events\RaidVisualizedEvent.h" />
     <ClInclude Include="..\src\Events\RecurringEvent.h" />
     <ClInclude Include="..\src\Events\SessionEndEvent.h" />
     <ClInclude Include="..\src\Events\SessionStartEvent.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="..\src\Events\LeaveBaseEvent.cpp" />
     <ClCompile Include="..\src\Events\PositionEvent.cpp" />
     <ClCompile Include="..\src\Events\RaidSelectedEvent.cpp" />
+    <ClCompile Include="..\src\Events\RaidVisualizedEvent.cpp" />
     <ClCompile Include="..\src\Events\RecurringEvent.cpp" />
     <ClCompile Include="..\src\Events\SessionEndEvent.cpp" />
     <ClCompile Include="..\src\Events\SessionStartEvent.cpp" />

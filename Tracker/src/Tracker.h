@@ -13,6 +13,7 @@
 #include "Events/LeaveBaseEvent.h"
 #include "Events/PositionEvent.h"
 #include "Events/RaidSelectedEvent.h"
+#include "Events/RaidVisualizedEvent.h"
 #include "Events/RecurringEvent.h"
 #include "Events/SessionEndEvent.h"
 #include "Events/SessionStartEvent.h"
@@ -99,6 +100,7 @@ public:
     static ActionUsedEvent* createActionUsedEvent();
     static EnterRaidMenuEvent* createEnterRaidMenuEvent();
     static RaidSelectedEvent* createRaidSelectedEvent();
+    static RaidVisualizedEvent* createRaidVisualizedEvent();
     static ItemConsumedEvent* createItemConsumedEvent();
     static PositionEvent* createPositionEvent();
 

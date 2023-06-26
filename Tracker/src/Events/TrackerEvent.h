@@ -14,6 +14,7 @@ enum class EventType {
 	ACTION_USED,		// Uso de una accion
 	ENTER_RAID_MENU,	// Entrada al menu de raid
 	RAID_SELECTED,      // Opcion de raid elegidas
+	RAID_VISUALIZED,	// Visualizar una raid
 	ITEM_CONSUMED,		// Consumo de un item
 	POSITION,	        // Posicion del jugador u otro npc
 };	
@@ -28,8 +29,9 @@ const std::string eventTypes[] = {
 	"ACTION_USED",		//5
 	"ENTER_RAID_MENU",	//6
 	"RAID_SELECTED",	//7
-	"ITEM_CONSUMED",	//8
-	"POSITION"			//9,
+	"RAID_VISUALIZED",	//8
+	"ITEM_CONSUMED",	//9
+	"POSITION"			//10,
 };
 
 enum class CSVFields;

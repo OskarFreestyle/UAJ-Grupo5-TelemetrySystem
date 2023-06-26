@@ -38,6 +38,8 @@ const std::string RaidSelectedEvent::toJson() {
 	nlohmann::ordered_json j = nlohmann::ordered_json::parse(TrackerEvent::toJson());
 
 	j["Day"] = day;
+	j["Location"] = location;
+	j["Hunger"] = hunger;
 
 	return j.dump(2);
 }
@@ -46,6 +48,8 @@ const void RaidSelectedEvent::toCSV(std::unordered_map<CSVFields, std::string>& 
 	TrackerEvent::toCSV(eventCSV);
 
 	eventCSV[CSVFields::Day] = std::to_string(day);
+	eventCSV[CSVFields::Location] = std::to_string(location);
+	eventCSV[CSVFields::Hunger] = std::to_string(hunger);
 }
 
 

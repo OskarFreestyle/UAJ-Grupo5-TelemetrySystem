@@ -217,6 +217,10 @@ RaidSelectedEvent* Tracker::createRaidSelectedEvent() {
     return new RaidSelectedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }
 
+RaidVisualizedEvent* Tracker::createRaidVisualizedEvent() {
+    return new RaidVisualizedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
+}
+
 ItemConsumedEvent* Tracker::createItemConsumedEvent() {
     return new ItemConsumedEvent(Timer::Instance()->getTimeNow(), instance_->id_);
 }

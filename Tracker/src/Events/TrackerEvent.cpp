@@ -23,7 +23,6 @@ const std::string TrackerEvent::toJson() {
 	ordered_json j;
 
 	j["EventType"] = eventTypes[(int)eventType_];
-	//j["EventType"] = eventType_;
 	j["SessionId"] = id_;
 	j["TimeStamp"] = timestamp_;
 

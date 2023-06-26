@@ -19,7 +19,8 @@ const std::string CSVPrefixes[] = {
 		"X",
 		"Y",
 		"Entity",
-		"Day"
+		"Day",
+		"Location"
 };
 
 enum class CSVFields {
@@ -37,6 +38,7 @@ enum class CSVFields {
 	Y,
 	Entity,
 	Day,
+	Location,
 	COUNT
 };
 
