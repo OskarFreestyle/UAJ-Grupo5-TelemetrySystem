@@ -3,5 +3,5 @@
 
 // ------------------- SessionStartEvent -----------------------
 
-SessionStartEvent::SessionStartEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_STARTED) {}
+SessionStartEvent::SessionStartEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_STARTED) {}
 

@@ -12,7 +12,7 @@ private:
 	std::string entity;
 
 public:
-	PositionEvent(double timestamp, const std::string& id);
+	PositionEvent(int timestamp, const std::string& id);
 
 	PositionEvent* setPosition(float x, float y);
 	PositionEvent* setEntity(std::string name);

@@ -6,7 +6,7 @@
 
 // ------------------- ReturnBaseEvent -----------------------
 
-LeaveBaseEvent::LeaveBaseEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
+LeaveBaseEvent::LeaveBaseEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::LEAVE_BASE) {
 	fatigue = sleepOption = day = 0;
 }
 

@@ -9,7 +9,7 @@ private:
 	int day;
 public:
 
-	ActionUsedEvent(double timestamp, const std::string& id);
+	ActionUsedEvent(int timestamp, const std::string& id);
 
 	ActionUsedEvent* setActions(int actions);
 	ActionUsedEvent* setDay(int day);

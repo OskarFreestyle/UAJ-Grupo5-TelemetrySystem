@@ -9,7 +9,7 @@ private:
 	int location;
 
 public:
-	RaidVisualizedEvent(double timestamp, const std::string& id);
+	RaidVisualizedEvent(int timestamp, const std::string& id);
 
 	RaidVisualizedEvent* setLocation(int location);
 

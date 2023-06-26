@@ -7,7 +7,7 @@
 
 // ------------------- RaidSelectedEvent -----------------------
 
-RaidSelectedEvent::RaidSelectedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
+RaidSelectedEvent::RaidSelectedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_SELECTED) {
 	day = hunger = location = 0;
 }
 

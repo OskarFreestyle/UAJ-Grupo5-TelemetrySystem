@@ -6,7 +6,7 @@
 
 // -------------------------- CraftShipEvent ------------------------------
 
-ShipItemCraftedEvent::ShipItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
+ShipItemCraftedEvent::ShipItemCraftedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SHIP_ITEM_CRAFTED) {
 	nCrafted = nCraftables = day = 0;
 }
 

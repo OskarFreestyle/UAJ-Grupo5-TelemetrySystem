@@ -12,7 +12,7 @@ private:
 
 public:
 
-	FoodItemCraftedEvent(double timestamp, const std::string& id);
+	FoodItemCraftedEvent(int timestamp, const std::string& id);
 
 	FoodItemCraftedEvent* setHunger(int hunger);
 	FoodItemCraftedEvent* setCraft(bool craft);

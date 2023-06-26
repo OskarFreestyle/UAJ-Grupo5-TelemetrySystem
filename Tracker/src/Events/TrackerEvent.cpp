@@ -10,7 +10,7 @@ using ordered_json = nlohmann::ordered_json;
 
 // -------------------------- Clase padre -----------------------
 
-TrackerEvent::TrackerEvent(double timestamp, const std::string& id, ::EventType eventType) {
+TrackerEvent::TrackerEvent(int timestamp, const std::string& id, ::EventType eventType) {
 
 	timestamp_ = timestamp;
 	id_ = id;

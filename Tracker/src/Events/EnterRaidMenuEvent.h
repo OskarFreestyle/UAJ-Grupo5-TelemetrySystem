@@ -10,7 +10,7 @@ private:
 
 public:
 
-	EnterRaidMenuEvent(double timestamp, const std::string& id);
+	EnterRaidMenuEvent(int timestamp, const std::string& id);
 
 	EnterRaidMenuEvent* setDay(int day);
 

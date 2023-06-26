@@ -6,7 +6,7 @@
 
 // -------------------- Position Event -----------------------
 
-PositionEvent::PositionEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::POSITION) {
+PositionEvent::PositionEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::POSITION) {
 	x = y = 0;
 }
 

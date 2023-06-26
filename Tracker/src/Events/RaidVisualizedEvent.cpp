@@ -6,7 +6,7 @@
 
 // ------------------- RaidSelectedEvent -----------------------
 
-RaidVisualizedEvent::RaidVisualizedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_VISUALIZED) {
+RaidVisualizedEvent::RaidVisualizedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::RAID_VISUALIZED) {
 	location = 0;
 }
 

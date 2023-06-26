@@ -6,7 +6,7 @@
 
 // ---------------------------- ActionUsedEvent ---------------------------------
 
-ActionUsedEvent::ActionUsedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
+ActionUsedEvent::ActionUsedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ACTION_USED) {
 	nActions = day = 0;
 }
 

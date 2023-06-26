@@ -12,7 +12,7 @@ private:
 
 public:
 
-	LeaveBaseEvent(double timestamp, const std::string& id);
+	LeaveBaseEvent(int timestamp, const std::string& id);
 
 	LeaveBaseEvent* setFatigue(int fatigue);
 	LeaveBaseEvent* setSleepOption(int sleepOption);

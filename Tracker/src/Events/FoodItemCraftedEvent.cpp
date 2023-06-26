@@ -6,7 +6,7 @@
 
 // -------------------- FoodItemCraftedEvent --------------------------------
 
-FoodItemCraftedEvent::FoodItemCraftedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
+FoodItemCraftedEvent::FoodItemCraftedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::FOOD_ITEM_CRAFTED) {
 	hunger = day = craft = 0;
 }
 

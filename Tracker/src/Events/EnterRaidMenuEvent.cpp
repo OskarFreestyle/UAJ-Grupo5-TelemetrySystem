@@ -6,7 +6,7 @@
 
 // ------------------------ EnterRaidMenuEvent ------------------------------
 
-EnterRaidMenuEvent::EnterRaidMenuEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
+EnterRaidMenuEvent::EnterRaidMenuEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ENTER_RAID_MENU) {
 	day = 0;
 }
 

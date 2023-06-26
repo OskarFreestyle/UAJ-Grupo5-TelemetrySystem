@@ -40,7 +40,7 @@ enum class CSVFields;
 class TrackerEvent {
 
 public:
-	TrackerEvent(double timestamp, const std::string& id, EventType eventType);
+	TrackerEvent(int timestamp, const std::string& id, EventType eventType);
 	virtual ~TrackerEvent() {};
 	virtual const std::string toJson();
 	virtual const void toCSV(std::unordered_map<CSVFields, std::string>& eventCSV);
@@ -53,7 +53,7 @@ public:
 
 protected:
 
-	double timestamp_;
+	int timestamp_;
 	std::string id_;
 	EventType eventType_;
 	uint16_t maskBits_;

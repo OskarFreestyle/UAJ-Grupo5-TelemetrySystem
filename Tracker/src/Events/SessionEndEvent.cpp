@@ -3,5 +3,5 @@
 
 // ------------------- SessionEndEvent -----------------------
 
-SessionEndEvent::SessionEndEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
+SessionEndEvent::SessionEndEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::SESSION_ENDED) {}
 

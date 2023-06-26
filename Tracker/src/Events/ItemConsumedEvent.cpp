@@ -6,7 +6,7 @@
 
 // ------------------- UsingItemEvent -----------------------
 
-ItemConsumedEvent::ItemConsumedEvent(double timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ITEM_CONSUMED) {
+ItemConsumedEvent::ItemConsumedEvent(int timestamp, const std::string& id) : TrackerEvent(timestamp, id, EventType::ITEM_CONSUMED) {
 	day = 0;
 }
 
