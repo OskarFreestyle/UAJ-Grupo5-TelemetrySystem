@@ -1,6 +1,6 @@
 #include "CSVSerializer.h"
 #include "Events/TrackerEvent.h"
-
+#include "checkML.h"
 
 CSVSerializer::CSVSerializer()
 {
@@ -23,6 +23,11 @@ CSVSerializer::CSVSerializer()
 
 	prefix += interfix;
 
+}
+
+CSVSerializer::~CSVSerializer()
+{
+	clearEventCSV();
 }
 
 std::string CSVSerializer::Serialize(TrackerEvent* event) {
@@ -63,4 +68,5 @@ void CSVSerializer::clearEventCSV()
 	for (int i = 0; i < (int)CSVFields::COUNT; i++) {
 		eventCSV[(CSVFields)i] = "";
 	}
+	eventCSV.clear();
 }

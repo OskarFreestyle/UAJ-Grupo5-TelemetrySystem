@@ -11,6 +11,7 @@ enum class EventType;
 class ISerializer {
 
 public:
+	virtual ~ISerializer() {};
 
 	/// <summary>
 	/// Método abstracto a redefinir por los objetos serializadores

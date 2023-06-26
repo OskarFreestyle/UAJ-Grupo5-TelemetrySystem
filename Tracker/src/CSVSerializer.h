@@ -6,22 +6,22 @@
 class TrackerEvent;
 
 const std::string CSVPrefixes[] = {
-		"Id",
-		"Time",
-		"Event type",
-		"Fatigue",
-		"Sleep option",
-		"Hunger",
-		"Can craft food items",
-		"Ship items crafted",
-		"Craftable ship items",
-		"Actions used",
-		"X",
-		"Y",
-		"Entity",
-		"Day",
-		"Location",
-		"Items"
+	"Id",
+	"Time",
+	"Event type",
+	"Fatigue",
+	"Sleep option",
+	"Hunger",
+	"Can craft food items",
+	"Ship items crafted",
+	"Craftable ship items",
+	"Actions used",
+	"X",
+	"Y",
+	"Entity",
+	"Day",
+	"Location",
+	"Items"
 };
 
 enum class CSVFields {
@@ -50,7 +50,7 @@ class CSVSerializer : public ISerializer {
 public:
 
 	CSVSerializer();
-	~CSVSerializer() {};
+	~CSVSerializer();
 
 	/// <summary>
 	/// Devuelve el evento serializado en formato CSV
