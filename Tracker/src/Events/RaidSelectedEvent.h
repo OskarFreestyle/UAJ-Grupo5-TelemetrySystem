@@ -6,10 +6,10 @@
 class RaidSelectedEvent : public TrackerEvent {
 private:
 
-	std::list<int> items;
-	int location;
-	int hunger;
-	int day;
+	std::list<int> items;	//lista con los items del inventario
+	int location;			//localización en la que estamos durante la raid
+	int hunger;				//hambre que tiene el jugador
+	int day;				//día del ciclo
 
 public:
 	RaidSelectedEvent(int timestamp, const std::string& id);

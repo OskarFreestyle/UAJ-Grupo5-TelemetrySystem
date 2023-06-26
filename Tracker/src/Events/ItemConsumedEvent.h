@@ -6,7 +6,7 @@
 class ItemConsumedEvent : public TrackerEvent {
 
 private:
-	int day;
+	int day;	//dia del ciclo al consumir un objeto
 
 public:
 	ItemConsumedEvent(int timestamp, const std::string& id);

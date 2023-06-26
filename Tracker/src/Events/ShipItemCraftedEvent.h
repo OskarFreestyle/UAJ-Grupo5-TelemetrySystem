@@ -5,9 +5,9 @@
 // Evento crafteo de item de nave
 class ShipItemCraftedEvent : public TrackerEvent {
 private:
-	int nCrafted;
-	int nCraftables;
-	int day;
+	int nCrafted;		//numero con las partes de la nave que el jugador craftea
+	int nCraftables;	//numero de partes de la nave que el jugador puede craftear
+	int day;			//dia del ciclo
 public:
 	ShipItemCraftedEvent(int timestamp, const std::string& id);
 
